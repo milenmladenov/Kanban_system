@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<title>Account settings</title>
+
+<body>
+    <div th:replace="fragments/navigation :: navigation"></div>
+    <div class="container">
+        <link type="text/css" href="/css/bootstrap-formhelpers.min.css" rel="stylesheet" media="screen"/>
+        <script src="/js/bootstrap-formhelpers.min.js"></script>
+
+        <div class="container">
+            <h1><span class="glyphicon glyphicon-user"></span> Account settings </h1>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel panel-login">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li role="presentation" class="active"><a href="/settings"><span class="glyphicon glyphicon-user"></span> Edit profile</a></li>
+                            <li role="presentation"><a href="/upload-avatar"><span class="far fa-image marginright"></span> Update avatar</a></li>
+                            <li role="presentation"><a href="/changepassword"><span class="glyphicon glyphicon-lock"></span> Change password</a></li>
+                            <li role="presentation"><a href="/appsettings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                            <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent activity</a></li>
+                            <li role="presentation"><a href="/report-bug"><span class="fa fa-bug"></span> Report bug</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <form th:action="@{/settings}" method="post" th:object="${loggedUser}">
+                        <div class="panel panel-login">
+                            <div th:if="${param.success}">
+                                <div class="alert alert-success alert-dismissable">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    Your profile settings have been updated
+                                </div>
+                            </div>
+                            <div th:if="${param.error}">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    Please enter valid information
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        First name:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input autocomplete="off" class="form-control" th:value="${loggedUser.firstName}" th:field="*{firstName}"></input>
+                                    </div>
+                                    <div class="col-md-2">
+                                        Last name:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input autocomplete="off" class="form-control" th:value="${loggedUser.lastName}" th:field="*{lastName}"></input>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Age:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" th:value="${loggedUser.age}" th:field="*{age}" type="number" min="0" max="100"></input>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Country:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!--<div class="bfh-selectbox bfh-countries" th:field="*{country}" th:attr="data-country=${currentCountry}" data-flags="true">-->
+                                        <!--</div>-->
+                                        <select class="input-medium bfh-countries form-control" th:attr="data-country=${currentCountry}" th:field="*{country}"></select>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fab fa-facebook marginright"></span> Facebook:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input autocomplete="off" class="form-control" th:value="${loggedUser.facebook}" th:field="*{facebook}"></input>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fab fa-twitter marginright"></span> Twitter:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input autocomplete="off" class="form-control" th:value="${loggedUser.twitter}" th:field="*{twitter}"></input>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fab fa-skype marginright"></span> Skype:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input autocomplete="off" class="form-control" th:value="${loggedUser.skype}" th:field="*{skype}"></input>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span autocomplete="off" class="fab fa-github marginright"></span> GitHub:
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" th:value="${loggedUser.github}" th:field="*{github}"></input>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit"
+                                   name="task-submit"
+                                   id="task-submit"
+                                   class="form-control btn btn-info"
+                                   value="Update Settings"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

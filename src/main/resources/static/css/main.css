@@ -1,0 +1,349 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-image:url("/img/background/bg.png");
+}
+
+h1 {
+    color: #78ab46;
+}
+
+@media only screen and (max-width: 500px) {
+    .mobilecalendar {
+        height: 500px;
+    }
+}
+
+.profile-pic {
+    max-height: 200px;
+}
+
+.profile-pic-box:hover .edit {
+    display: block;
+    left: 200px;
+    top: 44px;
+}
+
+.profile-pic-box:hover img {
+    color: #000000;
+    background:rgba(0,0,0,0.5) center no-repeat;
+}
+
+.edit {
+    padding-top: 7px;
+    padding-right: 7px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+}
+
+.edit a {
+    color: #000;
+}
+
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.glyphicon {
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.fa {
+    margin-right: 5px;
+}
+
+th.fc-day-header.fc-sat, th.fc-day-header.fc-sun{
+    background-color: #FFF9C4 !important;
+}
+
+.someSpace {
+    margin-right: 8px;
+}
+
+.badge {
+    margin-left: 5px;
+}
+
+.panel-login {
+    margin-top: 20px;
+    border-color: #ccc;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    padding: 20px;
+    word-wrap: break-word;
+}
+
+.panel-primary {
+    margin-top: 20px;
+    border-color: #ccc;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    word-wrap: break-word;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.error-message {
+    color: #a94442;
+}
+
+.error-message:first-letter {
+    text-transform: capitalize;
+}
+
+.navbar{
+    margin-top: 20px;
+}
+
+#calendar {
+    margin: 0 auto;
+    width: auto;
+}
+
+.marginup {
+    margin-bottom: 3px;
+}
+
+.marginright {
+    margin-right: 5px;
+}
+
+.marginleft {
+    margin-left: 5px;
+}
+
+@media (max-width: 1199px) {
+    .navbarAvatarAndMessage {
+        display: none;
+    }
+}
+
+.mobileMarginTop {
+    margin-top: 10px;
+}
+
+.popover.primary {
+    border-color:#337ab7;
+}
+.popover.primary>.arrow {
+    border-top-color:#337ab7;
+}
+.popover.primary>.popover-title {
+    color:#fff;
+    background-color:#337ab7;
+    border-color:#337ab7;
+}
+.popover.success {
+    border-color:#d6e9c6;
+}
+.popover.success>.arrow {
+    border-top-color:#d6e9c6;
+}
+.popover.success>.popover-title {
+    color:#3c763d;
+    background-color:#dff0d8;
+    border-color:#d6e9c6;
+}
+.popover.info {
+    border-color:#bce8f1;
+}
+.popover.info>.arrow {
+    border-top-color:#bce8f1;
+}
+.popover.info>.popover-title {
+    color:#31708f;
+    background-color:#d9edf7;
+    border-color:#bce8f1;
+}
+.popover.warning {
+    border-color:#faebcc;
+}
+.popover.warning>.arrow {
+    border-top-color:#faebcc;
+}
+.popover.warning>.popover-title {
+    color:#8a6d3b;
+    background-color:#fcf8e3;
+    border-color:#faebcc;
+}
+.popover.danger {
+    border-color:#ebccd1;
+}
+.popover.danger>.arrow {
+    border-top-color:#ebccd1;
+}
+.popover.danger>.popover-title {
+    color:#a94442;
+    background-color:#f2dede;
+    border-color:#ebccd1;
+}
+
+.blockquote-noborder {
+    border-left:none;
+}
+
+.quote-badge{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.quote-box{
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background-color: #4ADFCC;
+    color:white;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+
+}
+
+.quotation-mark{
+    margin-top: -10px;
+    font-weight: bold;
+    font-size:100px;
+    color:white;
+    font-family: "Times New Roman", Georgia, Serif;
+}
+
+.padding5 {
+    padding-right: 5px;
+}
+
+.quote-text{
+    font-size: 19px;
+    margin-top: -65px;
+}
+
+.material-switch > input[type="checkbox"] {
+    display: none;
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative;
+    width: 40px;
+}
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+
+.fc-today {
+    background: inherit;
+}
+
+.fc-today .fc-day-number {
+    border-radius: 50%;
+    /*width: 16px;*/
+    height: 16px;
+    margin: 2px;
+    background: #FFF;
+    border: 2px solid #EF5350;
+    color: #666;
+    text-align: center;
+    font-weight: bold;
+}
+
+.fc-agendaWeek-button, .fc-month-button, .fc-agendaDay-button, .fc-today-button, .fc-listWeek-button {
+    text-transform: capitalize;
+    font-size: 10px;
+}
+
+.redtext {
+    color: #d9534f;
+}
+
+.greentext {
+    color: #78ab46;
+}
+.login{
+    padding-left : 35%;
+    padding-top: 10%;
+}
+
+ .registration{
+     padding-left : 30%;
+        padding-top: 2%;
+
+ }
+
+ .already-reg{
+    font-size : 14px;
+ }
+
+ .modal {
+   display: none; /* Hidden by default */
+   position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+   padding-top: 100px; /* Location of the box */
+   left: 0;
+   top: 0;
+   width: 100%; /* Full width */
+   height: 100%; /* Full height */
+   overflow: auto; /* Enable scroll if needed */
+   background-color: rgb(0,0,0); /* Fallback color */
+   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+ }
+
+ /* Modal Content */
+ .modal-content {
+   background-color: #fefefe;
+   margin: auto;
+   padding: 20px;
+   border: 1px solid #888;
+   width: 80%;
+ }
+
+ /* The Close Button */
+ .close {
+   color: #aaaaaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+ }
+
+ .close:hover,
+ .close:focus {
+   color: #000;
+   text-decoration: none;
+   cursor: pointer;
+ }

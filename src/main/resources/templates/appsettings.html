@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<title>Application settings</title>
+
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+<div class="container">
+    <link type="text/css" href="/css/bootstrap-formhelpers.min.css" rel="stylesheet" media="screen"/>
+    <script src="/js/bootstrap-formhelpers.min.js"></script>
+
+    <div class="container">
+        <h1><span class="glyphicon glyphicon-cog"></span>Application settings </h1>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-login">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation"><a href="/settings"><span class="glyphicon glyphicon-user"></span> Edit profile</a></li>
+                        <li role="presentation"><a href="/upload-avatar"><span class="far fa-image marginright"></span> Update avatar</a></li>
+                        <li role="presentation"><a href="/changepassword"><span class="glyphicon glyphicon-lock"></span> Change password</a></li>
+                        <li role="presentation" class="active"><a href="/appsettings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent activity</a></li>
+                        <li role="presentation"><a href="/report-bug"><span class="fa fa-bug"></span> Report bug</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <form th:action="@{/appsettings}" method="post" th:object="${loggedUser}">
+                    <div class="panel panel-login">
+                        <div th:if="${param.success}">
+                            <div class="alert alert-success alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                Your profile settings have been updated
+                            </div>
+                        </div>
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                Please enter valid information
+                            </div>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Motivational messages for tasks
+                                <div class="material-switch pull-right">
+                                    <input id="motivationText" name="motivationText" type="checkbox" th:checked="${loggedUser.motivationalTaskMessage}"/>
+                                    <label for="motivationText" class="label-info"></label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Small calendar on the home page
+                                <div class="material-switch pull-right">
+                                    <input id="smallCalendar" name="smallCalendar" type="checkbox" th:checked="${loggedUser.smallCalendar}"/>
+                                    <label for="smallCalendar" class="label-info"></label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Import To-Do's in your calendar
+                                <div class="material-switch pull-right">
+                                    <input id="todoToCalendar" name="todoToCalendar" type="checkbox" th:checked="${loggedUser.todoToCalendar}"/>
+                                    <label for="todoToCalendar" class="label-info"></label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Show e-mail address on profile
+                                <div class="material-switch pull-right">
+                                    <input id="showEmail" name="showEmail" type="checkbox" th:checked="${loggedUser.showEmail}"/>
+                                    <label for="showEmail" class="label-info"></label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <input type="submit"
+                               name="appsettings-submit"
+                               id="appsettings-submit"
+                               class="form-control btn btn-info"
+                               value="Update Settings"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

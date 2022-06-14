@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <link rel='stylesheet' href='webjars/fullcalendar/3.8.0/dist/fullcalendar.css'/>
+    <script src='webjars/moment/2.19.1/min/moment.min.js'></script>
+    <script src='webjars/fullcalendar/3.8.0/dist/fullcalendar.js'></script>
+    <script src="js/gcal.min.js"></script>
+    <script src="js/calendarWidget.js"></script></head>
+<title th:text="'Home - '+${loggedUser.firstName}+' '+${loggedUser.lastName}"></title>
+
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+
+
+
+<div class="container">
+    <h2 class="greentext"><span class="fa fa-home"></span> <span >Welcome </span> <span th:text="${loggedUser.firstName}  + ' ' + ${loggedUser.lastName}"></span></h2>
+<br>
+    <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        + Add New Plan
+    </button>
+    <br>
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+    <h1><span class="glyphicon glyphicon-edit"></span> Add a new plan </h1>
+    <form th:action="@{/}" th:object="${plan}" method="post">
+        <div class="panel panel-login">
+            <div class="form-group">
+                <label for="description" class="control-label col-sm-2">Plan name: </label>
+                <input id="description" type="text" autocomplete="off" th:field="*{title}"
+                       class="form-control"
+                       autofocus="autofocus"
+                       required="required"
+                       placeholder="Title"/>
+            </div>
+            <!--            <div class="form-group">-->
+            <!--                <select class="form-control" >-->
+            <!--                    <option value="0">Add Member</option>-->
+            <!--                    <option th:each="member : ${users}" th:field="*{member}"  th:value="${member.id}" th:text="${member.firstName}  + ' ' + ${member.lastName}"></option>-->
+            <!--                </select>-->
+            <!--            </div>-->
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <input type="submit"
+                               name="task-submit"
+                               id="task-submit"
+                               class="form-control btn btn-info"
+                               value="New plan"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+        </div>
+    </div>
+    <h3 class="greentext">All plans:</h3>
+    <div class="row">
+        <div th:each="plan : ${createdPlans}" class="panel panel-login list-inline-item">
+      <a th:href="@{/plan(id=${plan.id})}" style="text-decoration: none; cursor: pointer;">
+            <ul class="list-inline">
+                <li style="list-style:none; " class="panel panel-login list-inline-item">
+                    <div>
+                        <h1>
+                        [[${plan.title}]]
+                        </h1>Created By <b>[[${plan.creator.firstName}]] [[${plan.creator.lastName}]]</b>
+                    </div>
+                </li>
+            </ul>
+      </a>
+        </div>
+        <div th:each="plan : ${memberPlans}" class="panel panel-login list-inline-item">
+            <a th:href="@{/plan(id=${plan.id})}" style="text-decoration: none; cursor: pointer;">
+                <ul class="list-inline">
+                    <li style="list-style:none; " class="panel panel-login list-inline-item">
+                        <div>
+                            <h1>
+                                [[${plan.title}]]
+                            </h1>Created By <b>[[${plan.creator.firstName}]] [[${plan.creator.lastName}]]</b>
+                        </div>
+                    </li>
+                </ul>
+            </a>
+        </div>
+
+</div>
+</div>
+
+<script>
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+</body>
+</html>

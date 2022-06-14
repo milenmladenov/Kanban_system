@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<title>Messages</title>
+
+<body>
+    <div th:replace="fragments/navigation :: navigation"></div>
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" type="text/css"/>
+
+    <script src="js/tooltip.js"></script>
+
+    <script src="js/dataTablesConfig/messages_dt.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css" type="text/css"/>
+
+    <div class="container">
+        <h1><span class="fa fa-inbox"></span> Messages: <a href="/users" class="btn btn-success pull-right"><span class="fa fa-plus"></span> New message</a><br/></h1>
+        <div th:if="${param.error}">
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span class="fas fa-exclamation-circle marginright"></span> This message does not exist
+            </div>
+        </div>
+        <div th:if="${param.self}">
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span class="fas fa-exclamation-circle marginright"></span> You can't message yourself
+            </div>
+        </div>
+        <div th:if="${param.erroruser}">
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span class="fas fa-exclamation-circle marginright"></span> This user does not exist
+            </div>
+        </div>
+        <div th:if="${param.success}">
+            <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span class="fas fa-paper-plane marginright"></span> Your message has been sent!
+            </div>
+        </div>
+
+        <div class="panel panel-login table-responsive">
+            <table id="messagesTable" class="table table-hover table-striped">
+                <thead class="thead-inverse">
+                     <tr>
+                         </th>ID</th>
+                         <th class="col-md-5">Subject</th>
+                         <th>From</th>
+                         <th>Date</th>
+                         <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="message : ${messages}">
+                    <td th:if="${message.opened}==1"><a th:href="@{/message(id=${message.id})}" th:text="${message.subject}"></a></td>
+                    <td th:if="${message.opened}==0"><span class="label label-default">New</span> <strong><a th:href="@{/message(id=${message.id})}" th:text="${message.subject}"></a></strong></td>
+                    <td>
+                        <a th:href="@{/profile(id=${message.sender.id})}" th:text="${message.sender.firstName} + ' ' + ${message.sender.lastName}" style="color: #333"></a>
+                    </td>
+                    <td th:text="${#dates.format(message.date, 'dd MMMMM yyyy')}"></td>
+                    <!--<td th:text="${message.date}"></td>-->
+                    <td>
+                        <!--OLD delete button (refreshes page) <a th:href="@{/message-delete(id=${message.id})}" data-toggle="tooltip" data-placement="left" title="Delete this message" class="btn btn-danger btn-sm fa fa-trash"></a>-->
+                        <a id="deleteMessage" th:value="${message.id}" data-toggle="tooltip" data-placement="left" title="Delete this message" class="btn btn-danger btn-sm fa fa-trash"></a>
+                        <a class="btn btn-default btn-sm fa fa-reply" th:href="@{/message-to(id=${message.sender.id})}" data-toggle="tooltip" data-placement="right" title="Reply"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<title>Registration</title>
+    <body>
+        <div th:replace="fragments/navigation :: navigation"></div>
+        <div class="container">
+            <div class="row align-items-center registration">
+                <div class="col-6">
+                    <div class="panel panel-login">
+                    <div th:if="${param.success}">
+                        <div class="alert alert-info alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            You've been registered successfully! Go to the <strong><a href="/login">login page</a></strong>.
+                        </div>
+                    </div>
+
+                    <h1 class="text-center">Registration</h1>
+                        <div class="panel-body">
+
+                        <form th:action="@{/registration}" th:object="${user}" method="post">
+                        <p class="error-message"
+                           th:if="${#fields.hasGlobalErrors()}"
+                           th:each="error : ${#fields.errors('global')}"
+                           th:text="${error}">Validation error</p>
+                        <div class="panel panel-login">
+                            <div class="panel-body">
+                                <!-- Username -->
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('username')}? 'has-error':''">
+                                    <label for="lastName" class="control-label">Username</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <input id="username"
+                                               class="form-control"
+                                               autofocus="autofocus"
+                                               placeholder="Username"
+                                               th:field="*{username}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('username')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('firstName')}? 'has-error':''">
+                                    <label for="firstName" class="control-label">First name</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <input id="firstName"
+                                               class="form-control"
+                                               placeholder="First name"
+                                               th:field="*{firstName}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error: ${#fields.errors('firstName')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('lastName')}? 'has-error':''">
+                                    <label for="lastName" class="control-label">Last name</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        <input id="lastName"
+                                               class="form-control"
+                                               placeholder="Last name"
+                                               th:field="*{lastName}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('lastName')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                                    <label for="email" class="control-label">E-mail</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                        <input id="email"
+                                               class="form-control"
+                                               placeholder="E-mail"
+                                               th:field="*{email}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('email')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('confirmEmail')}? 'has-error':''">
+                                    <label for="confirmEmail" class="control-label">Confirm e-mail</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                        <input id="confirmEmail"
+                                               class="form-control"
+                                               placeholder="Confirm e-mail"
+                                               th:field="*{confirmEmail}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('confirmEmail')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                                    <label for="password" class="control-label">Password</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                        <input id="password"
+                                               class="form-control"
+                                               type="password"
+                                               placeholder="Password"
+                                               data-toggle="popover" title="Password Strength" data-content="Enter Password..."
+                                               th:field="*{password}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('password')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
+                                    <label for="confirmPassword" class="control-label">Confirm password</label>
+                                    <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-resize-vertical"></span></span>
+                                        <input id="confirmPassword"
+                                               class="form-control"
+                                               type="password"
+                                               placeholder="Confirm password"
+                                               th:field="*{confirmPassword}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('confirmPassword')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
+                                    <p class="error-message"
+                                       th:each="error : ${#fields.errors('terms')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn form-control btn-success">Register</button>
+                                            <p class="already-reg">Already registered? <a href="/" th:href="@{/login}">Login here</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                        </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+                    <script>
+            $(document).ready(function(){
+
+                //minimum 8 characters
+                var bad = /(?=.{8,}).*/;
+                //Alpha Numeric plus minimum 8
+                var good = /^(?=\S*?[a-z])(?=\S*?[0-9])\S{8,}$/;
+                //Must contain at least one upper case letter, one lower case letter and (one number OR one special char).
+                var better = /^(?=\S*?[A-Z])(?=\S*?[a-z])((?=\S*?[0-9])|(?=\S*?[^\w\*]))\S{8,}$/;
+                //Must contain at least one upper case letter, one lower case letter and (one number AND one special char).
+                var best = /^(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[^\w\*])\S{8,}$/;
+
+                $('#password').on('keyup', function () {
+                    var password = $(this);
+                    var pass = password.val();
+                    var passLabel = $('[for="password"]');
+                    var stength = 'Weak';
+                    var pclass = 'danger';
+                    if (best.test(pass) == true) {
+                        stength = 'Very Strong';
+                        pclass = 'success';
+                    } else if (better.test(pass) == true) {
+                        stength = 'Strong';
+                        pclass = 'warning';
+                    } else if (good.test(pass) == true) {
+                        stength = 'Almost Strong';
+                        pclass = 'warning';
+                    } else if (bad.test(pass) == true) {
+                        stength = 'Weak';
+                    } else {
+                        stength = 'Very Weak';
+                    }
+
+                    var popover = password.attr('data-content', stength).data('bs.popover');
+                    popover.setContent();
+                    popover.$tip.addClass(popover.options.placement).removeClass('danger success info warning primary').addClass(pclass);
+
+                });
+
+                $('input[data-toggle="popover"]').popover({
+                    placement: 'top',
+                    trigger: 'focus'
+                });
+
+            })
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+        </script>
+    </body>
+
+</html>

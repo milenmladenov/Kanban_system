@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head th:replace="fragments/header :: header">
+</head>
+<body>
+<div th:fragment="navigation" class="container">
+
+
+    <nav class="navbar navbar-inverse navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">Planner Management</a>
+        </div>
+        <!-- Collection of nav links, forms, and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li sec:authorize="isAuthenticated()" class="nav-item "><a class="nav-link" href="/task-list">Tasks <span
+                        th:text="${session.tasksLeft}" class="badge badge-notify "></span></a></li>
+                <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" href="/users">Users</a></li>
+            </ul>
+
+            <div class="nav navbar-nav navbar-right" >
+                <div sec:authorize="isAuthenticated()" class="dropdown show" >
+                    <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span
+                            th:text="${loggedUser.firstName} + ' ' + ${loggedUser.lastName}"></span> <span><b
+                            class="caret"></b></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item"  href="/profile" ><span class="glyphicon glyphicon-user"></span> <span
+                                th:text="${loggedUser.username}"></span></a></li>
+                     <a class="dropdown-item" href="/messages"><span class="glyphicon glyphicon-inbox"></span> Messages <span
+                                th:text="${session.unreadMessages}" class="badge badge-notify marginup"></span></a>
+                     <a class="dropdown-item" href="/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                        <li th:each="role: ${loggedUser.roles}" class="nav-item" th:if="${role.name}=='ROLE_ADMIN'">
+                            <a class="dropdown-item"  href="/admin"><span class="glyphicon glyphicon-briefcase"></span> Admin</a></li>
+                            <a  class="dropdown-item"  href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </div>
+                </div>
+
+
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/registration"> <span class="glyphicon glyphicon-user"> </span> Sign up</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a  class="nav-link" href="/login"> <span class="glyphicon glyphicon-log-in"> </span> Login</a>
+                </li>
+            </div>
+                <ul id="notification" class="nav navbar-nav navbar-right navbarAvatarAndMessage">
+                    <a class="nav-link" href="/profile"><img data-toggle="tooltip" data-placement="bottom" title="Profile" sec:authorize="isAuthenticated()" style="margin-top: 10px" class="img-circle" th:src="@{/api/avatar/__${loggedUser.id}__}" width="32" height="32"/></a>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:if="${session.pendingTasksCount > 0}" href="/tasks-pending" data-toggle="tooltip" data-placement="bottom" th:title="${session.pendingTasksCount}+' pending task(s)'"><span th:if="${session.pendingTasksCount > 0} " class="fas fa-calendar-check marginright margindown fa-lg faa-ring animated"> </span><span
+                                th:text="${session.pendingTasksCount}" class="badge" style="margin-top: 1px"></span></a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:if="${session.unreadMessages > 0}" href="/messages" data-toggle="tooltip" data-placement="bottom" th:title="${session.unreadMessages}+' unread message(s)'">
+                            <span th:if="${session.unreadMessages} > 0" class="fa fa-envelope margindown fa-lg faa-horizontal animated"> </span>
+                            <span th:text="${session.unreadMessages}" id="newMessageCountNavigation" class="badge" style="margin-top: 1px"></span>
+                        </a>
+                    </li>
+                </ul>
+        </div>
+    </nav>
+</div>
+<script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+<script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
+</body>
+</html>
