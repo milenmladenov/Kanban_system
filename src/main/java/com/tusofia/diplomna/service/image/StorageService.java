@@ -1,4 +1,4 @@
-package com.oan.management.service.image;
+package com.tusofia.diplomna.service.image;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head th:replace="fragments/header :: header">
+</head>
+<body>
+
+<div th:fragment="plan-fragment">
+    <div >
+        <h1>
+            <a th:href="@{/plan-list)}">[[${plan.title}]]</a>
+        </h1>
+        Created By<b>[[${plan.creator}]]</b>
+    </div>
+</div>
+</body>
+</html>

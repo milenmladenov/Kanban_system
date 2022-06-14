@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<title>[[${plan.title}]]</title>
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="text-center">
+                <h1 class="greentext"></span><span th:text="${plan.title}"></span></h1>
+                <p th:text="${plan.title}"></p>
+                <a th:href="@{/plan/add-member(id=${plan.id})}" class="btn btn-primary"><button>+ Add Member</button></a>
+
+                <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    + Add New Task
+                </button>
+                <br>
+                <h1><span class="fa fa-users"></span> [[${plan.title}]] Tasks :</h1>
+                <div class="panel panel-login list-inline-item">
+                    <ul th:each="taskNotStarted : ${notStartedTasks}"  class="list-inline">
+                        <li style="list-style:none; " class="panel panel-login list-inline-item">
+                            <div>
+                                <h1>
+                                    [[${taskNotStarted.description}]]<br>
+
+                                </h1>
+                                <div th:if="${task.status == 'NOT STARTED'}"><button>In Progress</button></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="panel panel-login list-inline-item">
+                    <ul th:each="inProgressTask : ${inProgressTasks}"  class="list-inline">
+                        <li style="list-style:none; " class="panel panel-login list-inline-item">
+                            <div>
+                                <h1>
+                                    [[${inProgressTask.description}]]<br>
+
+                                </h1>
+                                <div th:if="${task.status == 'IN PROGRESS'}"><button>DONE</button></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div  class="panel panel-login list-inline-item">
+                    <ul th:each="doneTask : ${doneTasks}" class="list-inline">
+                        <li style="list-style:none; " class="panel panel-login list-inline-item">
+                            <div>
+                                <h1>
+                                    [[${doneTask.description}]]<br>
+
+                                </h1>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <form th:action="@{/plan(id=${plan.id})}" th:object="${task}" method="post">
+                                <div class="panel panel-login">
+                                    <div class="form-group">
+                                        <label for="description" class="control-label col-sm-2">Description: </label>
+                                        <input id="description" type="text" autocomplete="off" th:field="*{description}"
+                                               class="form-control"
+                                               autofocus="autofocus"
+                                               required="required"
+                                               placeholder="Description"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="date" class="control-label col-md-3">Target date: </label>
+                                        <input id="date" type="date" name="date" th:field="*{targetDate}"
+                                               class="form-control"
+                                               required="required"
+                                               placeholder="MM/DD/YYYY"/>
+                                    </div>
+                                </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <input type="submit"
+                                               name="task-submit"
+                                               id="task-submit"
+                                               class="form-control btn btn-info"
+                                               value="New task"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+     </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+
+
+
+<script>
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>

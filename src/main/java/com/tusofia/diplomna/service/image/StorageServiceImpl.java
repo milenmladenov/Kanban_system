@@ -1,7 +1,7 @@
-package com.oan.management.service.image;
+package com.tusofia.diplomna.service.image;
 
-import com.oan.management.exception.StorageException;
-import com.oan.management.exception.StorageFileNotFoundException;
+import com.tusofia.diplomna.exception.StorageException;
+import com.tusofia.diplomna.exception.StorageFileNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

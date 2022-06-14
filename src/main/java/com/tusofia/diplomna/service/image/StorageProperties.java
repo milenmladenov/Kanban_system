@@ -1,4 +1,4 @@
-package com.oan.management.service.image;
+package com.tusofia.diplomna.service.image;
 
 import org.springframework.stereotype.Service;
 

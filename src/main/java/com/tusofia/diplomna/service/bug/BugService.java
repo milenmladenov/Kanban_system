@@ -1,12 +1,10 @@
-package com.oan.management.service.bug;
+package com.tusofia.diplomna.service.bug;
 
-import com.oan.management.model.Bug;
+
+import com.tusofia.diplomna.model.Bug;
 
 import java.util.List;
 
-/**
- * Created by Oan on 29/01/2018.
- */
 public interface BugService {
     List<Bug> findAll();
     Bug save(Bug bug);

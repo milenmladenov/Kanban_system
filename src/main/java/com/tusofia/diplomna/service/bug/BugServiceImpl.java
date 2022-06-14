@@ -1,18 +1,13 @@
-package com.oan.management.service.bug;
+package com.tusofia.diplomna.service.bug;
 
-import com.oan.management.model.Bug;
-import com.oan.management.repository.BugRepository;
+
+import com.tusofia.diplomna.model.Bug;
+import com.tusofia.diplomna.repository.BugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @since 29/01/2018.
- * @author Oan Stultjens
- * Implementation of {@link BugService}
- * Basic CRUD operations
- */
 
 @Service
 public class BugServiceImpl implements BugService {
@@ -29,10 +24,7 @@ public class BugServiceImpl implements BugService {
         return bugRepository.save(bug);
     }
 
-    /**
-     * Find unfixed bugs
-     * @return List of {@link Bug}
-     */
+
     @Override
     public List<Bug> findByFixedIsFalse() {
         return bugRepository.findByFixedIsFalse();
@@ -40,7 +32,7 @@ public class BugServiceImpl implements BugService {
 
     @Override
     public Bug findById(Long id) {
-        return bugRepository.findOne(id);
+        return bugRepository.getById(id);
     }
 
     @Override
