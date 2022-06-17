@@ -10,10 +10,8 @@
 
 <body>
 <div th:replace="fragments/navigation :: navigation"></div>
-
-
-
 <div class="container">
+    <br>
     <h2 class="greentext"><span class="fa fa-home"></span> <span >Welcome </span> <span th:text="${loggedUser.firstName}  + ' ' + ${loggedUser.lastName}"></span></h2>
 <br>
     <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">

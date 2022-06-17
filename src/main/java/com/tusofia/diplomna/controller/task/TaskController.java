@@ -3,6 +3,7 @@ package com.tusofia.diplomna.controller.task;
 import com.tusofia.diplomna.dto.AddCommentDto;
 import com.tusofia.diplomna.dto.TaskCreationDto;
 import com.tusofia.diplomna.model.Comment;
+import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.Task;
 import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.repository.TaskRepository;
@@ -245,11 +246,13 @@ public class TaskController {
         User userLogged = getLoggedUser();
         Task currentTask = taskService.getById(taskId);
         List<Comment> commentList = commentService.findByTask(currentTask);
+        Plan plan = currentTask.getPlan();
         if (currentTask != null){
             model.addAttribute("loggedUser",userLogged);
             model.addAttribute("task",currentTask);
             model.addAttribute("comments",commentList);
             model.addAttribute("comment",new Comment());
+            model.addAttribute("plan",plan);
         }
         return "task";
     }
@@ -269,18 +272,8 @@ public class TaskController {
         return "redirect:/task?taskId=" + currentTask.getId();
 
     }
-    @GetMapping("/task/status")
-    public String changeStatus(@RequestParam Long taskId,Model model){
-        User userLogged = getLoggedUser();
-        Task currentTask = taskService.getById(taskId);
-        if (currentTask != null){
-            model.addAttribute("loggedUser",userLogged);
-            model.addAttribute("task",currentTask);
-        }
-        return "task-status";
-    }
 
-    @PostMapping("/task/status")
+    @PutMapping("/task")
     public String changeStatus(@RequestParam(required = false) Long taskId,Model model,TaskCreationDto taskCreationDto){
         Task currentTask = taskService.getById(taskId);
         model.addAttribute("task",currentTask);
