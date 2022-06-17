@@ -6,13 +6,13 @@
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
 
- <h2 class="display-6"> <a th:href="@{/plan(id=${plan.id})}">[[${plan.title}]]</a> - [[${task.description}]]</h2>
+ <h2 class="display-6"> <a th:href="@{/plan(id=${plan.id})}">[[${plan.title}]]</a> - [[${task.title}]]</h2>
 
     <div class="panel panel-login ">
 <h1 class="display-4 ">[[${task.description}]]<br>
-    <p>Target date : [[${task.targetDate}]]</p></h1><br>
+    <p class="display-8">Target date : [[${task.targetDate}]]</p></h1><br>
     Working status : [[${task.status}]]<br>
-<div> Change status <form style="display:inline"th:action="@{/task(taskId=${task.id})}" th:method="put" th:object="${task}">
+<div> Change status <form style="display:inline" th:action="@{/task(taskId=${task.id})}" th:method="put" th:object="${task}">
     <select th:if="${task.status == 'NOT STARTED'}" th:field="*{status}">
         <option value="IN PROGRESS">IN PROGRESS</option>
         <option value="DONE">DONE</option>
@@ -23,14 +23,15 @@
     <select th:if="${task.status == 'DONE'}" th:field="*{status}">
         <option value="IN PROGRESS">IN PROGRESS</option>
     </select>
-    <input class="form-control btn btn-info" type="submit" value="CHANGE" style="
+    <input class="form-control btn btn-primary" type="submit" value="CHANGE" style="
     width: 176px;
 ">
 </form>
+    <a href="#comment"><button type="button" class="btn btn-info">Add Comment</button></a>
 </div>
     </div>
     <div>
-        <ul style="padding-left:0px;" th:each="comment : ${comments}">
+        <ul style="padding-left:0px;" th:each="comment : ${#lists.sort(comments,byId)}">
             <li style="list-style:none; " class="panel panel-login list-group-item">
 
                 <p><b>[[${comment.commenter.firstName}]] [[${comment.commenter.lastName}]]</b> added:</p>
@@ -46,7 +47,7 @@
         <div class="col-sm">
     <form style="width:420px; padding-top: 20px;padding-left: 20px;padding-bottom: 20px;padding-right: 20px;" class="panel panel-login" th:action="@{/task(taskId=${task.id})}"  th:object="${comment}" method="post">
         <label  style="margin-bottom: 22px; margin-top: 20px;" class="control-label ">Add Comment:</label>
-        <textarea style=" height: 108px; width: 370px;" type="text" name="comment-body" th:field="*{body}"></textarea>
+        <textarea id="comment" style=" height: 108px; width: 370px;" type="text" name="comment-body" th:field="*{body}"></textarea>
         <input style="width: 126px; margin-left:65%;" type="submit" class="form-control btn btn-info"
                value="Add" />
     </form>

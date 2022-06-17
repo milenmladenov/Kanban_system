@@ -252,6 +252,7 @@ public class TaskController {
             model.addAttribute("task",currentTask);
             model.addAttribute("comments",commentList);
             model.addAttribute("comment",new Comment());
+            model.addAttribute("byId", Comparator.comparing(Comment::getId).reversed());
             model.addAttribute("plan",plan);
         }
         return "task";
@@ -265,9 +266,7 @@ public class TaskController {
             model.addAttribute("loggedUser",userLogged);
             model.addAttribute("comment",new Comment());
         }
-        currentTask.setStatus(taskCreationDto.getStatus());
         addCommentDto.setTask(currentTask);
-        taskService.save(taskCreationDto,currentTask.getId());
         commentService.save(addCommentDto,currentTask.getId());
         return "redirect:/task?taskId=" + currentTask.getId();
 
