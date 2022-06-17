@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/header :: header"></head>
+<title>[[${task.title}]]</title>
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+<div class="container">
+    <form th:action="@{/task/status(taskId=${task.id})}" method="post" th:object="${task}">
+        <select th:if="${task.status == 'NOT STARTED'}">
+            <option value="apple">IN PROGRESS</option>
+            <option value="banana">DONE</option>
+        </select>
+        <select th:if="${task.status == 'IN PROGRESS'}">
+            <option value="banana">DONE</option>
+        </select>
+        <input type="submit" value="CHANGE">
+    </form>
+</div>
+</body>
+</html>

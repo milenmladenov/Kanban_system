@@ -1,76 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="fragments/header :: header"></head>
 <title>[[${plan.title}]]</title>
 <body>
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
+<!--                <a th:href="@{/plan/add-member(id=${plan.id})}" class="btn btn-primary"><button>+ Add Member</button></a>-->
+
+
+                <h1 class="greentext"></span> [[${plan.title}]] Tasks :</h1>
+            <br>
+            <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                + Add New Task
+            </button>
+
     <div class="row">
-        <div class="col-md-3">
-            <div class="text-center">
-                <h1 class="greentext"></span><span th:text="${plan.title}"></span></h1>
-                <p th:text="${plan.title}"></p>
-                <a th:href="@{/plan/add-member(id=${plan.id})}" class="btn btn-primary"><button>+ Add Member</button></a>
+        <div class="col-sm" >
+            <br>
+            <div>NOT STARTED :</div>
+            <div th:each="taskNotStarted : ${notStartedTasks}" class="  list-inline-item panel panel-login" >
 
-                <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    + Add New Task
-                </button>
-                <br>
-                <h1><span class="fa fa-users"></span> [[${plan.title}]] Tasks :</h1>
-                <div class="panel panel-login list-inline-item">
-                    <ul th:each="taskNotStarted : ${notStartedTasks}"  class="list-inline">
-                        <li style="list-style:none; " class="panel panel-login list-inline-item">
-                            <div>
-                                <h1>
-                                    [[${taskNotStarted.description}]]<br>
+                <ul style="padding-left: 0px;" >
+                        <li style="list-style:none; " class=" list-group-item">
+                                <p>
+                                    [[${plan.title}]]-[[${taskNotStarted.id}]] <br>
 
-                                </h1>
-                                <div th:if="${task.status == 'NOT STARTED'}"><button>In Progress</button></div>
-                            </div>
+                            </p>
+                            <a th:href="@{/task(taskId=${taskNotStarted.id})}" style="text-decoration: none; color:green; cursor: pointer;">  <h4>  [[${taskNotStarted.title}]]</h4> </a>
+                        </li>
+                    </ul>
+
+            </div>
+
+
+    </div>
+
+
+        <div class="col-sm">
+            <br>
+            <div>IN PROGRESS :</div>
+            <div th:each="inProgressTask : ${inProgressTasks}" class=" list-inline-item panel panel-login" >
+                    <ul style="padding-left: 0px;"  >
+                        <li style="list-style:none; " class="list-group-item">
+                            <p>
+                            [[${plan.title}]]-[[${inProgressTask.id}]] <br>
+
+                            </p>
+                            <a th:href="@{/task(taskId=${inProgressTask.id})}" style="text-decoration: none; color:green; cursor: pointer;">  <h4>  [[${inProgressTask.title}]]</h4> </a>
+
                         </li>
                     </ul>
                 </div>
+            </div>
 
 
-                <div class="panel panel-login list-inline-item">
-                    <ul th:each="inProgressTask : ${inProgressTasks}"  class="list-inline">
-                        <li style="list-style:none; " class="panel panel-login list-inline-item">
-                            <div>
-                                <h1>
-                                    [[${inProgressTask.description}]]<br>
 
-                                </h1>
-                                <div th:if="${task.status == 'IN PROGRESS'}"><button>DONE</button></div>
-                            </div>
+        <div class="col-sm">
+            <br>
+            <div>DONE:</div>
+            <div th:each="doneTask : ${doneTasks}" class=" list-inline-item panel panel-login" >
+                    <ul style="padding-left: 0px;"  >
+                        <li style="list-style:none; " class="list-group-item">
+
+                            <p>
+                                [[${plan.title}]]-[[${doneTask.id}]] <br>
+
+                            </p>
+                            <a th:href="@{/task(taskId=${doneTask.id})}" style="text-decoration: none; color:green; cursor: pointer;">  <h4>  [[${doneTask.title}]]</h4> </a>
+
                         </li>
                     </ul>
-                </div>
-                <div  class="panel panel-login list-inline-item">
-                    <ul th:each="doneTask : ${doneTasks}" class="list-inline">
-                        <li style="list-style:none; " class="panel panel-login list-inline-item">
-                            <div>
-                                <h1>
-                                    [[${doneTask.description}]]<br>
 
-                                </h1>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+</div>
+        </div>
 
                 <div id="myModal" class="modal">
                     <!-- Modal content -->
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
+                    <div class="modal-task-content">
+                        <span class="close-modal">&times;</span>
                         <form th:action="@{/plan(id=${plan.id})}" th:object="${task}" method="post">
-                                <div class="panel panel-login">
+                                <div class="panel panel-login" style="height: 432px;">
                                     <div class="form-group">
-                                        <label for="description" class="control-label col-sm-2">Description: </label>
-                                        <input id="description" type="text" autocomplete="off" th:field="*{description}"
+                                        <label for="description" class="control-label col-sm-2">Title: </label>
+                                        <input id="title" type="text" autocomplete="off" th:field="*{title}"
                                                class="form-control"
                                                autofocus="autofocus"
                                                required="required"
-                                               placeholder="Description"/>
+                                               />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description" class="control-label col-sm-2">Description: </label>
+                                        <textarea id="description" type="text" autocomplete="off" th:field="*{description}"
+                                               class="form-control"
+                                               autofocus="autofocus"
+                                               required="required"
+                                                  style="height: 184px;"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="date" class="control-label col-md-3">Target date: </label>
@@ -80,6 +104,7 @@
                                                placeholder="MM/DD/YYYY"/>
                                     </div>
                                 </div>
+                            <br>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6 col-sm-offset-3">
@@ -87,6 +112,7 @@
                                                name="task-submit"
                                                id="task-submit"
                                                class="form-control btn btn-info"
+                                               style="margin-left:90%;"
                                                value="New task"/>
                                     </div>
                                 </div>
@@ -113,7 +139,7 @@
 
 
 
-</div>
+
 </div>
 
 
@@ -121,7 +147,7 @@
 <script>
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementsByClassName("close-modal")[0];
 btn.onclick = function() {
   modal.style.display = "block";
 }

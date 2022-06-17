@@ -16,7 +16,7 @@ public interface PlanService {
 
     List<Plan> findByCreatorAndMember(User creator, User member);
     List<Plan> findByMember(User member);
-
+    Plan findPlanByTaskId(Long id);
 //    void addMember(AddMemberToPlanDto member);
     void removeMember(User user,Long id);
 }

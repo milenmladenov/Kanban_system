@@ -1,9 +1,12 @@
 package com.tusofia.diplomna.controller.task;
 
+import com.tusofia.diplomna.dto.AddCommentDto;
 import com.tusofia.diplomna.dto.TaskCreationDto;
+import com.tusofia.diplomna.model.Comment;
 import com.tusofia.diplomna.model.Task;
 import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.repository.TaskRepository;
+import com.tusofia.diplomna.service.comment.CommentService;
 import com.tusofia.diplomna.service.plan.PlanService;
 import com.tusofia.diplomna.service.task.TaskService;
 import com.tusofia.diplomna.service.user.UserService;
@@ -37,6 +40,9 @@ public class TaskController {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private CommentService commentService;
 
     public User getLoggedUser() {
         return userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -113,7 +119,7 @@ public class TaskController {
     }
 
     @PostMapping("/task-assign")
-    public String assignTask(Model model, Task task, Authentication authentication, @RequestParam Long id, @RequestParam("targetDate") String date,TaskCreationDto taskCreationDto) {
+    public String assignTask(Model model, @RequestParam Long id, @RequestParam("targetDate") String date,TaskCreationDto taskCreationDto) {
         User userLogged = getLoggedUser();
         User assignedTo = userService.getById(id);
         if (userLogged != null) {
@@ -197,7 +203,7 @@ public class TaskController {
     }
 
     @PutMapping("/task-edit")
-    public String editTask(Model model, Task task, Authentication authentication) {
+    public String editTask(Model model, Task task) {
         User userLogged = getLoggedUser();
         List<Task> taskList = taskService.findByUser(userLogged);
         if (userLogged != null) {
@@ -233,5 +239,55 @@ public class TaskController {
         userService.decrementTasksCompleted(userLogged);
         return "redirect:/task-list";
     }
+
+    @GetMapping("/task")
+    public String singleTaskPage(@RequestParam Long taskId,Model model){
+        User userLogged = getLoggedUser();
+        Task currentTask = taskService.getById(taskId);
+        List<Comment> commentList = commentService.findByTask(currentTask);
+        if (currentTask != null){
+            model.addAttribute("loggedUser",userLogged);
+            model.addAttribute("task",currentTask);
+            model.addAttribute("comments",commentList);
+            model.addAttribute("comment",new Comment());
+        }
+        return "task";
+    }
+
+    @PostMapping("/task")
+    public String addComment(@RequestParam(required = false) Long taskId, Model model, AddCommentDto addCommentDto,TaskCreationDto taskCreationDto){
+        User userLogged = getLoggedUser();
+        Task currentTask = taskService.getById(taskId);
+        if (currentTask != null){
+            model.addAttribute("loggedUser",userLogged);
+            model.addAttribute("comment",new Comment());
+        }
+        currentTask.setStatus(taskCreationDto.getStatus());
+        addCommentDto.setTask(currentTask);
+        taskService.save(taskCreationDto,currentTask.getId());
+        commentService.save(addCommentDto,currentTask.getId());
+        return "redirect:/task?taskId=" + currentTask.getId();
+
+    }
+    @GetMapping("/task/status")
+    public String changeStatus(@RequestParam Long taskId,Model model){
+        User userLogged = getLoggedUser();
+        Task currentTask = taskService.getById(taskId);
+        if (currentTask != null){
+            model.addAttribute("loggedUser",userLogged);
+            model.addAttribute("task",currentTask);
+        }
+        return "task-status";
+    }
+
+    @PostMapping("/task/status")
+    public String changeStatus(@RequestParam(required = false) Long taskId,Model model,TaskCreationDto taskCreationDto){
+        Task currentTask = taskService.getById(taskId);
+        model.addAttribute("task",currentTask);
+        currentTask.setStatus(taskCreationDto.getStatus());
+        taskService.changeStatus(currentTask.getId());
+        return "redirect:/task?taskId=" + currentTask.getId();
+    }
+
 
 }

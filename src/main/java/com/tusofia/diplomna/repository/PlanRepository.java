@@ -13,4 +13,5 @@ public interface PlanRepository extends JpaRepository<Plan,Long>{
     List<Plan> findByCreator(User user);
     List<Plan> deleteMemberById(Long id);
     List<Plan> findByMember(User member);
+    Plan findByTaskId(Long id);
 }

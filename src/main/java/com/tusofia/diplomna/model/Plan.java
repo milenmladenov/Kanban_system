@@ -30,4 +30,6 @@ public class Plan {
    @ManyToOne
     private User member;
 
+
+
 }

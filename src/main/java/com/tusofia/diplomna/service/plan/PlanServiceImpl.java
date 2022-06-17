@@ -66,6 +66,12 @@ public class PlanServiceImpl implements PlanService {
     }
 
 
+    @Override
+    public Plan findPlanByTaskId(Long id) {
+        return planRepository.findByTaskId(id);
+    }
+
+
 //    @Override
 //    public void addMember(AddMemberToPlanDto member){
 //        User newMember = new User();

@@ -7,6 +7,9 @@ h1 {
     color: #78ab46;
 }
 
+a:hover{
+cursor:pointer;}
+
 @media only screen and (max-width: 500px) {
     .mobilecalendar {
         height: 500px;
@@ -330,20 +333,33 @@ th.fc-day-header.fc-sat, th.fc-day-header.fc-sun{
    margin: auto;
    padding: 20px;
    border: 1px solid #888;
-   width: 80%;
+   width: 741px;
  }
+ .modal-task-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 780px;
+  }
 
  /* The Close Button */
- .close {
+ .close-modal {
    color: #aaaaaa;
    float: right;
    font-size: 28px;
    font-weight: bold;
+    margin-left : 90%
  }
 
- .close:hover,
- .close:focus {
+ .close-modal:hover,
+ .close-modal:focus {
    color: #000;
    text-decoration: none;
    cursor: pointer;
+   ;
+ }
+
+ .new-plan-button{
+   margin-left : 100%;
  }

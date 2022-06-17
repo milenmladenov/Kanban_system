@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +16,8 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String title;
 
     private String description;
 
@@ -34,6 +37,9 @@ public class Task {
 
     @ManyToOne
     private Plan plan;
+
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Comment> comments;
 
 
     public Task(User userLogged, String description, Date targetDate, boolean completed, User userLogged1, boolean b) {

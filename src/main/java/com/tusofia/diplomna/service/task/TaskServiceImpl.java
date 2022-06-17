@@ -73,6 +73,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void changeStatus(Long id) {
+        Task task = taskRepository.getById(id);
+        taskRepository.save(task);
+    }
+
+    @Override
     public void deleteTaskById(int id) {
         taskRepository.delete(taskRepository.findById(id));
     }
@@ -90,6 +96,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = new Task();
         task.setCreator(userLogged);
         task.setUser(taskCreationDto.getUser());
+        task.setTitle(taskCreationDto.getTitle());
         task.setDescription(taskCreationDto.getDescription());
         task.setTargetDate(taskCreationDto.getTargetDate());
         task.setPlan(taskCreationDto.getPlan());

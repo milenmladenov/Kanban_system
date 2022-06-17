@@ -73,6 +73,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Plan> plan;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+
 //    public User(String username, String password,String email, Collection<? extends GrantedAuthority> mapRolesToAuthorities) {
 //    }
 }

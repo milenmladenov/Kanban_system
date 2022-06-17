@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/header :: header"></head>
+<title>[[${task.title}]]</title>
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+<div class="container">
+
+        <h2 class="display-2 "th:text="${task.title}"></h2>
+
+<h1 class="display-4 ">[[${task.description}]]<br>
+    <p>Target date : [[${task.targetDate}]]</p></h1><br>
+    Working status : [[${task.status}]]<br>
+<a th:href="@{/task/status(taskId=${task.id})}" >Change status</a>
+    <div>
+        <ul style="padding-left:0px;" th:each="comment : ${comments}">
+            <li style="list-style:none; " class="panel panel-login list-group-item">
+
+                <p><b>[[${comment.commenter.firstName}]] [[${comment.commenter.lastName}]]</b> added:</p>
+                <h1 text>
+                    [[${comment.body}]]
+                </h1>
+
+            </li>
+        </ul>
+    </div>
+<div><br>
+    <div class="row">
+        <div class="col-sm">
+    <form style="width:420px; padding-top: 20px;padding-left: 20px;padding-bottom: 20px;padding-right: 20px;" class="panel panel-login" th:action="@{/task(taskId=${task.id})}"  th:object="${comment}" method="post">
+        <label  style="margin-bottom: 22px; margin-top: 20px;" class="control-label ">Add Comment:</label>
+        <textarea style=" height: 108px; width: 370px;" type="text" name="comment-body" th:field="*{body}"></textarea>
+        <input style="width: 126px; margin-left:65%;" type="submit" class="form-control btn btn-info"
+               value="Add" />
+    </form>
+</div>
+
+    </div>
+</div>
+</div>
+</body>
+</html>

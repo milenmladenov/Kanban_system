@@ -20,7 +20,7 @@ public interface TaskService {
     void deleteTaskById(Long id);
     Task completeTaskById(Long id);
     Task uncompleteTaskById(Long id);
-
+    void changeStatus(Long id);
     void deleteTaskById(int id);
 
     Task save(TaskCreationDto taskCreationDto,Long id);
