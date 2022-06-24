@@ -13,6 +13,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long>{
     List<Task> findByUser(User user);
     List<Task> findByUserAndCompletedIsTrue(User user);
+    List<Task> findByPlanAndAssignedIsFalse(Plan plan);
     List<Task> findByUserAndCompletedIsFalse(User user);
     List<Task> findByUserAndCompletedIsFalseAndApprovedIsTrue(User user);
     List<Task> findByUserAndCompletedIsTrueAndApprovedIsTrue(User user);

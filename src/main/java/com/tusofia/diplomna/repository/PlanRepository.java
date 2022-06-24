@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan,Long>{
-    List<Plan> findByCreatorAndMember(User creator, User member);
     List<Plan> findByCreator(User user);
-    List<Plan> deleteMemberById(Long id);
-    List<Plan> findByMember(User member);
     Plan findByTaskId(Long id);
 }

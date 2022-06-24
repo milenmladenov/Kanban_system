@@ -22,7 +22,7 @@ public interface TaskService {
     Task uncompleteTaskById(Long id);
     void changeStatus(Long id);
     void deleteTaskById(int id);
-
+    Task assignTo(User user,Task task);
     Task save(TaskCreationDto taskCreationDto,Long id);
     Task getOne(Long id);
     Task editById(Long id, String desc, Date date, boolean completed);
@@ -31,6 +31,7 @@ public interface TaskService {
     String getMotivationalMessage(List<Task> taskList, User user);
     List<Task> findByUserAndCompletedIsFalseAndApprovedIsTrue(User user);
     List<Task> findByUserAndCompletedIsTrueAndApprovedIsTrue(User user);
+    List<Task> findByPlanAndAssignedIsFalse(Plan plan);
     List<Task> findByUserAndApprovedIsFalse(User user);
 
     void approveTask(Long id);

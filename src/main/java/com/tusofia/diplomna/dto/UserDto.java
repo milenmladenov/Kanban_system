@@ -15,6 +15,7 @@ import java.sql.Date;
 @AllArgsConstructor
 public class UserDto {
 
+    private Long id;
     @NotEmpty
     private String username;
 

@@ -37,13 +37,9 @@ public class User {
     private int tasksAssigned;
     private int messagesReceived;
     private int messagesSent;
-    private int eventsCreated;
     private Date registrationDate;
     private String country;
     private int age;
-    private boolean motivationalTaskMessage = true;
-    private boolean smallCalendar = true;
-    private boolean todoToCalendar = true;
     private boolean showEmail = true;
     // Social
     private String skype;
@@ -71,12 +67,16 @@ public class User {
     private List<Bug> bugs;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Plan> plan;
-
-    @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @OneToOne
+    private Plan createdPlan ;
 
+    @OneToOne
+    private MembersPlans membership;
+
+    public User(User member) {
+    }
 //    public User(String username, String password,String email, Collection<? extends GrantedAuthority> mapRolesToAuthorities) {
 //    }
 }

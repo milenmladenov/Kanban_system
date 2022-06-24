@@ -5,20 +5,21 @@
 <body>
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
-<!--                <a th:href="@{/plan/add-member(id=${plan.id})}" class="btn btn-primary"><button>+ Add Member</button></a>-->
-
-
                 <h1 class="greentext"></span> [[${plan.title}]] Tasks :</h1>
             <br>
             <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 + Add New Task
             </button>
-
-    <div class="row">
-        <div class="col-sm" >
+            <a th:href="@{/members(planId=${plan.id})}"><button type="button"  class="btn btn-primary" >
+                 + Add Member
+            </button></a>
+    <button type="button" id="myBtn2" class="btn btn-primary" >Show Members List
+    </button>
+    <div class="row" style="margin-top: 35px;">
+        <div class="col-sm" style="border-right:1px solid #000;" >
             <br>
-            <div>NOT STARTED :</div>
-            <div th:each="taskNotStarted : ${notStartedTasks}" class="  list-inline-item panel panel-login" >
+            <div style="margin-left: 106px;">NOT STARTED :</div>
+            <div th:each="taskNotStarted : ${notStartedTasks}" style="border-right:1px solid #000;" class="  list-inline-item panel panel-login" >
 
                 <ul style="padding-left: 0px;" >
                         <li style="list-style:none; " class=" list-group-item">
@@ -36,10 +37,10 @@
     </div>
 
 
-        <div class="col-sm">
+        <div class="col-sm" style="border-right:1px solid #000;">
             <br>
-            <div>IN PROGRESS :</div>
-            <div th:each="inProgressTask : ${inProgressTasks}" class=" list-inline-item panel panel-login" >
+            <div style="margin-left: 121px;">IN PROGRESS :</div>
+            <div th:each="inProgressTask : ${inProgressTasks}" style="border-right:1px solid #000;" class=" list-inline-item panel panel-login" >
                     <ul style="padding-left: 0px;"  >
                         <li style="list-style:none; " class="list-group-item">
                             <p>
@@ -55,10 +56,10 @@
 
 
 
-        <div class="col-sm">
+        <div class="col-sm" style="border-right:1px solid #000;">
             <br>
-            <div>DONE:</div>
-            <div th:each="doneTask : ${doneTasks}" class=" list-inline-item panel panel-login" >
+            <div style="margin-left: 140px;">DONE:</div>
+            <div th:each="doneTask : ${doneTasks}" style="border-right:1px solid #000;" class=" list-inline-item panel panel-login" >
                     <ul style="padding-left: 0px;"  >
                         <li style="list-style:none; " class="list-group-item">
 
@@ -122,6 +123,24 @@
                     </div>
                 </div>
             </div>
+            <div id="myModal2" class="modal2">
+
+    <!-- Modal content -->
+            <div class="modal-content2">
+        <span class="close2">&times;</span>
+                <div th:each="member : ${members}">
+                    <ul style="padding-left: 0px;"  >
+                        <li style="list-style:none; " class="list-group-item">
+                            <p>
+                                <img class="img-circle margin-right" width="32" height="32" th:src="@{/api/avatar/__${member.member.id}__}"/>
+                                <a th:href="@{/profile(id=${member.member.id})}" > [[${member.member.firstName}]] [[${member.member.lastName}]]</a></td>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+
+</div>
 
      </div>
     </div>
@@ -154,9 +173,20 @@ btn.onclick = function() {
 span.onclick = function() {
   modal.style.display = "none";
 }
+
+
+var modal2 = document.getElementById("myModal2");
+var btn2 = document.getElementById("myBtn2");
+var span2 = document.getElementsByClassName("close2")[0];
+btn2.onclick = function() {
+  modal2.style.display = "block";
+}
+span2.onclick = function() {
+  modal2.style.display = "none";
+}
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == modal2) {
+    modal2.style.display = "none";
   }
 }
 </script>

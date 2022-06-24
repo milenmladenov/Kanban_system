@@ -1,6 +1,7 @@
 package com.tusofia.diplomna.controller.plan;
 
 import com.tusofia.diplomna.dto.TaskCreationDto;
+import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.Task;
 import com.tusofia.diplomna.model.User;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class PlanController {
@@ -40,6 +39,7 @@ public class PlanController {
 
     @Autowired
     private TaskService taskService;
+
 
     public User getLoggedUser() {
         return userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -84,7 +84,7 @@ public class PlanController {
         }
         if (id != null) {
             Plan plan = planService.getById(id);
-            List<User> members = userService.getAllMembers(plan);
+            List<MembersPlans> members = planService.memberList(plan);
             List<Task> taskListNotStarted = taskService.findByPlanAndStatusIs(plan,"NOT STARTED");
             List<Task> taskListInProgress = taskService.findByPlanAndStatusIs(plan,"IN PROGRESS");
             List<Task> taskListDone = taskService.findByPlanAndStatusIs(plan,"DONE");
@@ -118,53 +118,39 @@ public class PlanController {
         taskService.save(taskCreationDto,userLogged.getId());
         return "redirect:/plan?id=" + plan.getId();
     }
-    @GetMapping("/plan/add-member")
-    public String addMemberListPage(Model model, @RequestParam Long id) {
+    @GetMapping("/members")
+    public String addMemberListPage(Model model, @RequestParam Long planId) {
         User userLogged = getLoggedUser();
+        Plan plan = planService.getById(planId);
         List<User> users = userService.findAll();
-        Plan plan = planService.getById(id);
-        if (plan != null) {
-            model.addAttribute("loggedUser", userLogged);
-            model.addAttribute("plan", plan);
-            model.addAttribute("users", users);
-        } else {
-            return "redirect:/plan?=" + plan.getId();
-        }
-        return "add-member";
-    }
-    @PostMapping("/plan/add-member")
-    public String addMember(HttpServletRequest req, Model model,Plan plan, @RequestParam(required = false) Long memberId){
-        User userLogged = getLoggedUser();
-        User member = userService.getById(memberId);
-        if (member != null && plan !=null){
-            model.addAttribute("loggedUser", userLogged);
-            model.addAttribute("member", member);
-            model.addAttribute("plan", plan);
-        }
-        plan.setMember(member);
-        planRepository.save(plan);
-        model.addAttribute("successMessage","The user is added to the plan!");
-        return "redirect:/plan?="+ plan.getId();
-    }
-
-
-    @GetMapping("/plan/add-member-confirm/")
-    public String addMemberSingleMemberPage(HttpServletRequest req, Model model, @RequestParam(required = false,name="planId") Long id, @RequestParam(required = false,name ="memberId") Long memberId) {
-        User userLogged = getLoggedUser();
-        User member = userService.getById(memberId);
-        if (member != null) {
-            model.addAttribute("member", member);
-        }
+        List <MembersPlans> membersPlans = planService.findByPlan(plan);
+        List <User> members = userService.getMembers(membersPlans);
+        users.remove(plan.getCreator());
+        users.removeAll(members);
         model.addAttribute("loggedUser", userLogged);
-        Plan plan = planService.getById(id);
-        if (plan != null) {
-            model.addAttribute("plan", plan);
-        }
-        return "add-member-confirm";
+        model.addAttribute("plan", plan);
+        model.addAttribute("members", membersPlans);
+        model.addAttribute("users", users);
+        model.addAttribute("memberExistsMessage","This User is already added to the plan !");
+
+        return "members";
     }
 
-
-
+    @PostMapping("/members")
+    public String addMember(Model model,Long planId, MembersPlans membersPlans,Long memberId){
+        User userLogged = getLoggedUser();
+        Plan plan = planService.getById(planId);
+        User member = userService.getById(memberId);
+        if (plan != null){
+            model.addAttribute("plan", plan);
+            model.addAttribute("member",member);
+        }
+        membersPlans.setMember(member);
+        membersPlans.setPlan(plan);
+        member.setMembership(membersPlans);
+        planService.addMember(membersPlans);
+        return "redirect:/members?planId=" + plan.getId();
+    }
 }
 
 

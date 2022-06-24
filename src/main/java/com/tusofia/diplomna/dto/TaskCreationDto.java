@@ -16,7 +16,8 @@ import java.sql.Date;
 @AllArgsConstructor
 public class TaskCreationDto {
 
-
+    @NotNull
+    private Long id;
     @NotEmpty
     private String title;
     @NotEmpty

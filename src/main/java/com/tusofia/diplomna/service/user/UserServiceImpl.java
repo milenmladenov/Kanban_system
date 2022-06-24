@@ -1,7 +1,9 @@
 package com.tusofia.diplomna.service.user;
 
-import com.tusofia.diplomna.dto.AddMemberToPlanDto;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tusofia.diplomna.dto.UserDto;
+import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.Role;
 import com.tusofia.diplomna.model.User;
@@ -21,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +54,23 @@ public class UserServiceImpl implements UserService {
     public User getById(Long id) {
         return userRepository.getById(id);
     }
+
+
+    @Override
+    public <MembersPlans, User> List<MembersPlans> convertList(List<User> list, Class<MembersPlans> clazz) {
+        Objects.requireNonNull(clazz);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        return Optional.ofNullable(list)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(obj -> mapper.convertValue(obj, clazz))
+                .collect(Collectors.toList());
+    }
+
+
 
     public User save(UserDto registration) {
         User user = new User();
@@ -182,22 +198,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setMotivationalTaskMessage(User user, boolean value) {
-        user.setMotivationalTaskMessage(value);
-        return userRepository.save(user);
+    public List<User> getMembers(List <MembersPlans> membersPlans) {
+        return userRepository.findAllByMembershipIn(membersPlans);
     }
 
-    @Override
-    public User setSmallCalendar(User user, boolean value) {
-        user.setSmallCalendar(value);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User setTodoToCalendar(User user, boolean value) {
-        user.setTodoToCalendar(value);
-        return userRepository.save(user);
-    }
 
     @Override
     public User setShowEmail(User user, boolean value) {
@@ -207,8 +211,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllMembers(Plan plan) {
-        return userRepository.findByPlan(plan);
+        return null;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -230,8 +235,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addMemberToPlan(AddMemberToPlanDto addMemberToPlanDto) {
-
+    public void addMemberToPlan(User member) {
+        userRepository.save(member);
     }
 
 

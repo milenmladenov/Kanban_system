@@ -31,11 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/img/**",
                             "/api/**",
                             "/webjars/**").permitAll()
-                    .antMatchers("/calendar", "/calendar-delete", "/calendar-edit", "/calendar-addEvent", "/calendar-updateEvent",
-                            "/contacts","/contact-edit",
+                    .antMatchers(
                             "/", "/index",
-                            "/budget", "/budget-new", "/budget-list",
-                            "expense-edit", "income-edit",
                             "/task-list", "/task-assign","/tasks-pending", "/task-approve", "/task-deny",
                             "/profile", "/upload-avatar",
                             "/users",

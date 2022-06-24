@@ -73,13 +73,13 @@
       </a>
         </div>
         <div th:each="plan : ${memberPlans}" class="panel panel-login list-inline-item">
-            <a th:href="@{/plan(id=${plan.id})}" style="text-decoration: none; cursor: pointer;">
+            <a th:href="@{/plan(id=${plan.plan.id})}" style="text-decoration: none; cursor: pointer;">
                 <ul class="list-inline">
                     <li style="list-style:none; " class="list-inline-item">
                         <div>
                             <h1>
-                                [[${plan.title}]]
-                            </h1>Created By <b>[[${plan.creator.firstName}]] [[${plan.creator.lastName}]]</b>
+                                [[${plan.plan.title}]]</h1>
+                            </h1>Created By <b>[[${plan.plan.creator.firstName}]] [[${plan.plan.creator.lastName}]]</b>
                         </div>
                     </li>
                 </ul>

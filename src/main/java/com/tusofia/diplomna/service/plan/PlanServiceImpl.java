@@ -1,8 +1,10 @@
 package com.tusofia.diplomna.service.plan;
 
 import com.tusofia.diplomna.dto.PlanCreationDto;
+import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
+import com.tusofia.diplomna.repository.MembersPlansRepository;
 import com.tusofia.diplomna.repository.PlanRepository;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,14 @@ public class PlanServiceImpl implements PlanService {
 
     private PlanRepository planRepository;
     private UserService userService;
+    private MembersPlansRepository membersPlansRepository;
 
     @Autowired
     @Lazy
-    public PlanServiceImpl(PlanRepository planRepository, UserService userService) {
+    public PlanServiceImpl(PlanRepository planRepository, UserService userService, MembersPlansRepository membersPlansRepository) {
         this.planRepository = planRepository;
         this.userService = userService;
+        this.membersPlansRepository = membersPlansRepository;
     }
 
     @Override
@@ -55,14 +59,15 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public List<Plan> findByCreatorAndMember(User creator, User member) {
-        return planRepository.findByCreatorAndMember(creator,member);
-
+    public List<MembersPlans> memberList(Plan plan) {
+        return membersPlansRepository.getAllMemberByPlan(plan);
     }
 
+
     @Override
-    public List<Plan> findByMember(User member) {
-        return planRepository.findByMember(member);
+    public List<MembersPlans> findByMember(User member) {
+      return membersPlansRepository.getAllPlanByMember(member);
+
     }
 
 
@@ -71,18 +76,27 @@ public class PlanServiceImpl implements PlanService {
         return planRepository.findByTaskId(id);
     }
 
+    @Override
+    public List<MembersPlans> findByPlan(Plan plan) {
+        return membersPlansRepository.findByPlan(plan);
+    }
 
-//    @Override
-//    public void addMember(AddMemberToPlanDto member){
-//        User newMember = new User();
-//        newMember.
-//            }
+
+    @Override
+    public void addMember(MembersPlans membersPlans){
+        membersPlansRepository.save(membersPlans);
+            }
 
     @Override
     public void removeMember(User user, Long id) {
         User planMember = userService.getById(id);
-        planRepository.deleteMemberById(planMember.getId());
     }
+
+    @Override
+    public List<MembersPlans> getMemberById(Long id) {
+        return null;
+    }
+
 }
 
 

@@ -29,6 +29,13 @@
 </form>
     <a href="#comment"><button type="button" class="btn btn-info">Add Comment</button></a>
 </div>
+        <span th:if="${task.assigned == true}">Assigned to: <b>[[${task.user.firstName}]] [[${task.user.lastName}]]</b>
+        </span>
+       <span th:if="${task.assigned == false}"> <a th:href="@{/task-assign(id=${task.id})}" class="btn btn-success btn-sm">
+            <span class="fas fa-calendar-check"></span> Assign task
+        </a>
+       </span>
+
     </div>
     <div>
         <ul style="padding-left:0px;" th:each="comment : ${#lists.sort(comments,byId)}">

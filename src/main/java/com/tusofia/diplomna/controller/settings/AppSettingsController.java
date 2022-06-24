@@ -44,21 +44,6 @@ public class AppSettingsController {
         User userLogged = userService.findByUser(authentication.getName());
         if (userLogged != null) {
             model.addAttribute("loggedUser", userLogged);
-            if (checkbox == null) {
-                userService.setMotivationalTaskMessage(userLogged, false);
-            } else {
-                userService.setMotivationalTaskMessage(userLogged, true);
-            }
-            if (smallCalendar == null) {
-                userService.setSmallCalendar(userLogged, false);
-            } else {
-                userService.setSmallCalendar(userLogged, true);
-            }
-            if (todoToCalendar == null) {
-                userService.setTodoToCalendar(userLogged, false);
-            } else {
-                userService.setTodoToCalendar(userLogged, true);
-            }
             if (showEmail == null) {
                 userService.setShowEmail(userLogged, false);
             } else {

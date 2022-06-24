@@ -2,10 +2,8 @@ package com.tusofia.diplomna.controller.task;
 
 import com.tusofia.diplomna.dto.AddCommentDto;
 import com.tusofia.diplomna.dto.TaskCreationDto;
-import com.tusofia.diplomna.model.Comment;
-import com.tusofia.diplomna.model.Plan;
-import com.tusofia.diplomna.model.Task;
-import com.tusofia.diplomna.model.User;
+import com.tusofia.diplomna.dto.UserDto;
+import com.tusofia.diplomna.model.*;
 import com.tusofia.diplomna.repository.TaskRepository;
 import com.tusofia.diplomna.service.comment.CommentService;
 import com.tusofia.diplomna.service.plan.PlanService;
@@ -16,10 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
@@ -100,39 +95,54 @@ public class TaskController {
         return "redirect:/task-list";
     }
 
-    @GetMapping("/task-assign")
-    public String assignTaskPage(Model model, TaskCreationDto taskCreationDto, @RequestParam Long id) {
+    @DeleteMapping("/task-list")
+    public String deleteTaskFromList(@RequestParam Long id, Authentication authentication) {
         User userLogged = getLoggedUser();
-        User recepient = userService.getById(id);
-        if (recepient != null) {
-            if (userLogged.getId() != id) {
-                model.addAttribute("recepient",recepient);
-                model.addAttribute("loggedUser", userLogged);
-                model.addAttribute("task", new TaskCreationDto());
-                taskCreationDto.setUser(recepient);
-                return "task-assign";
-            } else {
-                return "redirect:task-list?self";
+        // Check if it's user's task
+        if (taskService.findByUser(getLoggedUser()).contains(taskService.getOne(id))) {
+            taskService.deleteTaskById(id);
+            userService.decrementTasksCreated(userLogged);
+            if (taskService.getById(id).isCompleted()) {
+                userService.decrementTasksCompleted(userLogged);
             }
+            return "redirect:/task-list?deleted";
         } else {
-            return "redirect:task-list?usernotfound";
+            return "redirect:/task-list?notfound";
         }
     }
 
-    @PostMapping("/task-assign")
-    public String assignTask(Model model, @RequestParam Long id, @RequestParam("targetDate") String date,TaskCreationDto taskCreationDto) {
+    @GetMapping("/task-assign")
+    public String assignTaskPage(Model model, TaskCreationDto taskCreationDto, @RequestParam Long id,Long userId) {
         User userLogged = getLoggedUser();
-        User assignedTo = userService.getById(id);
+        Task task = taskService.getById(id);
+        Plan plan = task.getPlan();
+        List<MembersPlans> membersPlansList = planService.findByPlan(plan);
+        List<Task> notAssignedTasks = taskRepository.findByPlanAndAssignedIsFalse(plan);
+        if (task != null) {
+                model.addAttribute("task", task);
+                model.addAttribute("plan", plan);
+                model.addAttribute("notAssignedTasks", notAssignedTasks);
+                model.addAttribute("loggedUser", userLogged);
+                model.addAttribute("members", membersPlansList);
+                return "task-assign";
+            }
+            return "redirect:task-list?usernotfound";
+    }
+
+
+    @PostMapping("/task-assign")
+    public String assignTask(Model model,Long id,  @RequestParam Long userId, TaskCreationDto taskCreationDto, UserDto userDto) {
+        User userLogged = getLoggedUser();
+        Task task = taskService.getById(taskCreationDto.getId());
+        User assignedTo = userService.getById(userId);
         if (userLogged != null) {
             model.addAttribute("loggedUser", userLogged);
         }
-        if (assignedTo != null) {
-            taskService.save(taskCreationDto,assignedTo.getId());
+            task.setAssigned(true);
+            task.setUser(assignedTo);
+            taskService.assignTo(assignedTo,task);
             return "redirect:/profile?id="+assignedTo.getId()+"&assigned";
-        } else {
-            return "redirect:task-list?usernotfound";
         }
-    }
 
     @GetMapping("/task-approve")
     public String approveTask(Authentication authentication, @RequestParam Long id, HttpServletRequest req) {

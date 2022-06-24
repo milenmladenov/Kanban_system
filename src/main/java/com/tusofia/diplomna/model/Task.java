@@ -30,6 +30,8 @@ public class Task {
 
     private boolean approved;
 
+    private boolean assigned;
+
     private String status;
 
     @ManyToOne

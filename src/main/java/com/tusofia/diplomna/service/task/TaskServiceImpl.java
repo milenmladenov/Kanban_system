@@ -83,11 +83,7 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.delete(taskRepository.findById(id));
     }
 
-    /**
-     * Completes a task by the specified id
-     * @param id Long
-     * @return Task
-     */
+
 
 
     @Override
@@ -159,6 +155,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findByUserAndCompletedIsTrueAndApprovedIsTrue(User user) {
         return taskRepository.findByUserAndCompletedIsTrueAndApprovedIsTrue(user);
+    }
+
+    @Override
+    public List<Task> findByPlanAndAssignedIsFalse(Plan plan) {
+        return taskRepository.findByPlanAndAssignedIsFalse(plan);
     }
 
     @Override
@@ -239,5 +240,9 @@ public class TaskServiceImpl implements TaskService {
         return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date);
     }
 
-
+    @Override
+    public Task assignTo(User user,Task task) {
+        task.setUser(user);
+        return taskRepository.save(task);
+    }
 }

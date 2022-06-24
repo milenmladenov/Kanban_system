@@ -1,6 +1,7 @@
 package com.tusofia.diplomna.controller;
 
 import com.tusofia.diplomna.dto.PlanCreationDto;
+import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.service.plan.PlanService;
@@ -36,10 +37,9 @@ public class MainController {
     public String root(HttpServletResponse response, Model model,Long id) {
         User userLogged = getLoggedUser();
         List<Plan> creatorList = planService.findByCreator(userLogged);
-        List<Plan> memberList = planService.findByMember(userLogged);
+         List<MembersPlans> memberList = planService.findByMember(userLogged);
             if(userLogged == null){
             return "redirect:/login";
-
         }
             model.addAttribute("plan", new Plan());
             model.addAttribute("createdPlans",creatorList);

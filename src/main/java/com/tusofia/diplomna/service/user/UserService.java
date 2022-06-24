@@ -1,7 +1,7 @@
 package com.tusofia.diplomna.service.user;
 
-import com.tusofia.diplomna.dto.AddMemberToPlanDto;
 import com.tusofia.diplomna.dto.UserDto;
+import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,12 +40,11 @@ public interface UserService extends UserDetailsService {
     void incrementTasksCompleted(User user);
     void decrementTasksCompleted(User user);
 
-    User setMotivationalTaskMessage(User user, boolean value);
-    User setSmallCalendar(User user, boolean value);
-    User setTodoToCalendar(User user, boolean value);
     User setShowEmail(User user, boolean value);
     List <User> getAllMembers(Plan plan);
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    void addMemberToPlan(AddMemberToPlanDto addMemberToPlanDto);
+    void addMemberToPlan(User member);
     User getById(Long id);
+    <MembersPlans, User> List<MembersPlans> convertList(List<User> list, Class<MembersPlans> clazz);
+    public List<User> getMembers(List <MembersPlans> membersPlans);
 }

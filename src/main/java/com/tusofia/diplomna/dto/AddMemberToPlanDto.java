@@ -1,10 +1,15 @@
 package com.tusofia.diplomna.dto;
 
-import com.tusofia.diplomna.model.Plan;
+import com.tusofia.diplomna.model.MembersPlans;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddMemberToPlanDto {
 
-    private List<Plan> plan;
+    private MembersPlans membersPlans;
+
 }
