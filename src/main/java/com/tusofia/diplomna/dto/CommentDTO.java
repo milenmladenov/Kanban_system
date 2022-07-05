@@ -1,6 +1,6 @@
 package com.tusofia.diplomna.dto;
 
-
+import com.tusofia.diplomna.model.Task;
 import com.tusofia.diplomna.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendMessageDto {
+public class CommentDTO {
 
-    private String subject;
+  private User commenter;
 
-    private String messageText;
+  private String body;
 
-    private User sender;
-
-    private User receiver;
+  private Task task;
 }

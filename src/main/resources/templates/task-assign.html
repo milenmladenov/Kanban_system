@@ -4,23 +4,24 @@
 <title th:text="'Assign' + ' ' + ${task.title}"></title>
 
 <body>
-    <div th:replace="fragments/navigation :: navigation"></div>
+<div th:replace="fragments/navigation :: navigation"></div>
 
-    <div class="container">
-        <h1><span class="glyphicon glyphicon-edit"></span> Assign task</h1>
-        <strong class="marginright">Assign To: </strong>
-        <div class="container" th:each="members : ${members}">
+<div class="container">
+    <h1><span class="glyphicon glyphicon-edit"></span> Assign task</h1>
+    <strong class="marginright">Assign To: </strong>
+    <div class="container" th:each="member : ${members}">
         <form th:action="@{/task-assign(id=${task.id})}" th:object="${task}" method="post">
             <div class="panel panel-login">
                 <div class="form-group">
-                    <input type="hidden" name="taskId" th:value ="${task.id}"/>
-                    <input type="hidden" name="userId" th:value ="${members.member.id}"/>
-                    <p> [[${members.member.firstName}]] [[${members.member.lastName}]]</p>
-                    <input type="submit" name="task-submit"  id="task-submit" class="form-control btn btn-info" value="Assign task"/>
+                    <input type="hidden" name="taskId" th:value="${task.id}"/>
+                    <input type="hidden" name="userId" th:value="${member.id}"/>
+                    <p> [[${member.firstName}]] [[${member.lastName}]]</p>
+                    <input type="submit" name="task-submit" id="task-submit" class="form-control btn btn-info"
+                           value="Assign task"/>
                 </div>
-                </div>
+            </div>
         </form>
-                </div>
     </div>
+</div>
 </body>
 </html>

@@ -6,17 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanCreationDto {
+public class PlanDTO {
 
-    @NotEmpty
-    private String title;
+  @NotNull private Long id;
 
-    @NotEmpty
-    private User creator;
+  @NotEmpty private String title;
 
-    private User member;
+  @NotEmpty private User creator;
 
+  @NotEmpty private User member;
 }

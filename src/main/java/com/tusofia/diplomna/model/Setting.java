@@ -14,13 +14,11 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 public class Setting {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    private String title;
-    private String adminEmail;
-    private boolean allowRegistrations;
-
+  private String title;
+  private String adminEmail;
+  private boolean allowRegistrations;
 }
-

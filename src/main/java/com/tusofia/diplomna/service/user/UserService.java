@@ -1,7 +1,6 @@
 package com.tusofia.diplomna.service.user;
 
-import com.tusofia.diplomna.dto.UserDto;
-import com.tusofia.diplomna.model.MembersPlans;
+import com.tusofia.diplomna.dto.UserDTO;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,39 +11,51 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
-
 public interface UserService extends UserDetailsService {
-    User findByEmail(String email);
-    User save(UserDto registration);
-    User findByUser(String user);
-    Optional<User> findById(Long id);
+  User findByEmail(String email);
 
-    boolean authenticate(String username, String password);
+  User save(UserDTO registration);
 
-    List<User> findAll();
-    void addBugReport(User userLogged);
-    User editByUser(User user, String firstName, String lastName, String country, int age, String facebook, String skype,
-                    String github, String twitter, String email, String username);
-    void incrementMessagesReceivedStats(User user);
-    void incrementMessagesSentStats(User user);
-    User setSocialSettings(User user, String facebook, String twitter, String skype, String github);
-    User setName(User user, String firstName, String lastName);
-    void incrementTasksCreated(User user);
-    void decrementTasksCreated(User user);
+  User findByUser(String user);
 
-    void incrementTasksReceived(User user);
-    void incrementTasksAssigned(User user,Long id);
+  boolean authenticate(String username, String password);
 
-    void updateUserAttributes(User user, HttpServletRequest req);
+  List<User> findAll();
 
-    void incrementTasksCompleted(User user);
-    void decrementTasksCompleted(User user);
+  void addBugReport(User userLogged);
 
-    User setShowEmail(User user, boolean value);
-    List <User> getAllMembers(Plan plan);
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    void addMemberToPlan(User member);
-    User getById(Long id);
-    <MembersPlans, User> List<MembersPlans> convertList(List<User> list, Class<MembersPlans> clazz);
-    public List<User> getMembers(List <MembersPlans> membersPlans);
+  public User editByUser(
+      User user, String firstName, String lastName, String email, String username);
+
+  void incrementMessagesReceivedStats(User user);
+
+  void incrementMessagesSentStats(User user);
+
+  User setSocialSettings(User user, String facebook, String twitter, String skype, String github);
+
+  User setName(User user, String firstName, String lastName);
+
+  void incrementTasksCreated(User user);
+
+  void decrementTasksCreated(User user);
+
+  void incrementTasksReceived(User user);
+
+  void updateUserAttributes(User user, HttpServletRequest req);
+
+  User addMember(Plan plan, User user);
+
+  void incrementTasksCompleted(User user);
+
+  void decrementTasksCompleted(User user);
+
+  List<User> findAllByPlans(Plan plan);
+
+  User setShowEmail(User user, boolean value);
+
+  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+  User getById(Long id);
+
+
 }

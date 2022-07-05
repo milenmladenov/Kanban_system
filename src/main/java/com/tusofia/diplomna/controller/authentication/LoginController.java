@@ -1,6 +1,6 @@
 package com.tusofia.diplomna.controller.authentication;
 
-import com.tusofia.diplomna.dto.UserDto;
+import com.tusofia.diplomna.dto.UserDTO;
 import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +12,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 @Controller
 public class LoginController {
     @Autowired
     private UserService userService;
 
+    /**
+     * If the user is not logged in, show the login page. Otherwise, redirect to the home page
+     *
+     * @param model This is the model that will be passed to the view.
+     * @param authentication This is the authentication object that Spring Security uses to store the currently logged in
+     * user.
+     * @return A string that is the name of the view to be rendered.
+     */
     @GetMapping("/login")
-    public String login(Model model, Authentication authentication, HttpServletRequest request) {
+    public String login(Model model, Authentication authentication) {
         if (authentication == null) {
             model.addAttribute("page-title", "Login");
             return "login";
@@ -32,8 +37,15 @@ public class LoginController {
 
     }
 
+    /**
+     * If the user is authenticated, redirect to the index page, otherwise, return the login page
+     *
+     * @param model This is the model object that is used to pass data from the controller to the view.
+     * @param user This is the model attribute that is used to bind the form data to the model.
+     * @return The login page is being returned.
+     */
     @PostMapping("/login")
-    public String login(Model model, HttpServletResponse response, UserDto user){
+    public String login(Model model,UserDTO user){
         if (userService.authenticate(user.getUsername(),user.getPassword())){
             model.addAttribute("view","index");
             return "redirect:/";

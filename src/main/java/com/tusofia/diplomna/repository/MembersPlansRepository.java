@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MembersPlansRepository extends JpaRepository<MembersPlans,Long> {
-    List<MembersPlans> getAllPlanByMember(User member);
-    List<MembersPlans> getAllMemberByPlan(Plan plan);
-    MembersPlans findMemberByPlan(Plan plan);
-    List <MembersPlans> findByPlan(Plan plan);
+public interface MembersPlansRepository extends JpaRepository<MembersPlans, Long> {
+  List<MembersPlans> getAllPlanByMember(User member);
+
+  List<MembersPlans> getAllMemberByPlan(Plan plan);
+
+  MembersPlans findMemberByPlan(Plan plan);
+
+  List<MembersPlans> findByPlan(Plan plan);
 }

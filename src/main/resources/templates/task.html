@@ -6,32 +6,37 @@
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
 
- <h2 class="display-6"> <a th:href="@{/plan(id=${plan.id})}">[[${plan.title}]]</a> - [[${task.title}]]</h2>
+    <h2 class="display-6"><a th:href="@{/plan(id=${plan.id})}">[[${plan.title}]]</a> - [[${task.title}]]</h2>
 
     <div class="panel panel-login ">
-<h1 class="display-4 ">[[${task.description}]]<br>
-    <p class="display-8">Target date : [[${task.targetDate}]]</p></h1><br>
-    Working status : [[${task.status}]]<br>
-<div> Change status <form style="display:inline" th:action="@{/task(taskId=${task.id})}" th:method="put" th:object="${task}">
-    <select th:if="${task.status == 'NOT STARTED'}" th:field="*{status}">
-        <option value="IN PROGRESS">IN PROGRESS</option>
-        <option value="DONE">DONE</option>
-    </select>
-    <select th:if="${task.status == 'IN PROGRESS'}" th:field="*{status}">
-        <option value="DONE">DONE</option>
-    </select>
-    <select th:if="${task.status == 'DONE'}" th:field="*{status}">
-        <option value="IN PROGRESS">IN PROGRESS</option>
-    </select>
-    <input class="form-control btn btn-primary" type="submit" value="CHANGE" style="
+        <h1 class="display-4 ">[[${task.description}]]<br>
+            <p class="display-8">Target date : [[${task.targetDate}]]</p></h1>
+        <br>
+        Working status : [[${task.status}]]<br>
+        <div> Change status
+            <form style="display:inline" th:action="@{/task(taskId=${task.id})}" th:method="put" th:object="${task}">
+                <select th:if="${task.status == 'NOT STARTED'}" th:field="*{status}">
+                    <option value="IN PROGRESS">IN PROGRESS</option>
+                    <option value="DONE">DONE</option>
+                </select>
+                <select th:if="${task.status == 'IN PROGRESS'}" th:field="*{status}">
+                    <option value="DONE">DONE</option>
+                </select>
+                <select th:if="${task.status == 'DONE'}" th:field="*{status}">
+                    <option value="IN PROGRESS">IN PROGRESS</option>
+                </select>
+                <input class="form-control btn btn-primary" type="submit" value="CHANGE" style="
     width: 176px;
 ">
-</form>
-    <a href="#comment"><button type="button" class="btn btn-info">Add Comment</button></a>
-</div>
+            </form>
+            <a href="#comment">
+                <button type="button" class="btn btn-info">Add Comment</button>
+            </a>
+        </div>
         <span th:if="${task.assigned == true}">Assigned to: <b>[[${task.user.firstName}]] [[${task.user.lastName}]]</b>
         </span>
-       <span th:if="${task.assigned == false}"> <a th:href="@{/task-assign(id=${task.id})}" class="btn btn-success btn-sm">
+        <span th:if="${task.assigned == false}"> <a th:href="@{/task-assign(id=${task.id})}"
+                                                    class="btn btn-success btn-sm">
             <span class="fas fa-calendar-check"></span> Assign task
         </a>
        </span>
@@ -49,19 +54,22 @@
             </li>
         </ul>
     </div>
-<div><br>
-    <div class="row">
-        <div class="col-sm">
-    <form style="width:420px; padding-top: 20px;padding-left: 20px;padding-bottom: 20px;padding-right: 20px;" class="panel panel-login" th:action="@{/task(taskId=${task.id})}"  th:object="${comment}" method="post">
-        <label  style="margin-bottom: 22px; margin-top: 20px;" class="control-label ">Add Comment:</label>
-        <textarea id="comment" style=" height: 108px; width: 370px;" type="text" name="comment-body" th:field="*{body}"></textarea>
-        <input style="width: 126px; margin-left:65%;" type="submit" class="form-control btn btn-info"
-               value="Add" />
-    </form>
-</div>
+    <div><br>
+        <div class="row">
+            <div class="col-sm">
+                <form style="width:420px; padding-top: 20px;padding-left: 20px;padding-bottom: 20px;padding-right: 20px;"
+                      class="panel panel-login" th:action="@{/task(taskId=${task.id})}" th:object="${comment}"
+                      method="post">
+                    <label style="margin-bottom: 22px; margin-top: 20px;" class="control-label ">Add Comment:</label>
+                    <textarea id="comment" style=" height: 108px; width: 370px;" type="text" name="comment-body"
+                              th:field="*{body}"></textarea>
+                    <input style="width: 126px; margin-left:65%;" type="submit" class="form-control btn btn-info"
+                           value="Add"/>
+                </form>
+            </div>
 
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>

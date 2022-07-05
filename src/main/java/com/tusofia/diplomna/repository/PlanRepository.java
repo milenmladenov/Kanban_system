@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PlanRepository extends JpaRepository<Plan,Long>{
-    List<Plan> findByCreator(User user);
-    Plan findByTaskId(Long id);
+public interface PlanRepository extends JpaRepository<Plan, Long> {
+  List<Plan> findByCreator(User user);
+
+  List<Plan> findAllByMembers(User user);
+
+  Plan findByTaskId(Long id);
 }

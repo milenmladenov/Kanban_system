@@ -4,43 +4,47 @@
 <title th:text="'Message - '+${message.subject}"></title>
 
 <body>
-    <div th:replace="fragments/navigation :: navigation"></div>
-    <div class="container">
+<div th:replace="fragments/navigation :: navigation"></div>
+<div class="container">
 
-        <h3 style="color:#78ab46;"><span class="fa fa-envelope"> </span> <span th:text="${message.subject}"></span></h3>
-        <div class="panel panel-login">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-1">
-                        <img class="img-rounded img-responsive" th:src="@{/api/avatar/__${message.sender.id}__}"/>
-                    </div>
-                    <div class="col-md-2">
-                        <p>From: <a th:href="@{/profile(id=${message.sender.id})}"><span th:text="${message.sender.firstName} + ' ' + ${message.sender.lastName}"></span></a></p>
-                        <p>To: <a th:href="@{/profile(id=${message.receiver.id})}"><span th:text="${message.receiver.firstName} + ' ' + ${message.receiver.lastName}"></span></a></p>
-                    </div>
-                    <div class="col-md-2 col-md-offset-6">
-                        <span th:text="${#dates.format(message.date, 'EEEE, dd MMMM yyyy')}" class="pull-right"></span>
-                    </div>
+    <h3 style="color:#78ab46;"><span class="fa fa-envelope"> </span> <span th:text="${message.subject}"></span></h3>
+    <div class="panel panel-login">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1">
+                    <img class="img-rounded img-responsive" th:src="@{/api/avatar/__${message.sender.id}__}"/>
+                </div>
+                <div class="col-md-2">
+                    <p>From: <a th:href="@{/profile(id=${message.sender.id})}"><span
+                            th:text="${message.sender.firstName} + ' ' + ${message.sender.lastName}"></span></a></p>
+                    <p>To: <a th:href="@{/profile(id=${message.receiver.id})}"><span
+                            th:text="${message.receiver.firstName} + ' ' + ${message.receiver.lastName}"></span></a></p>
+                </div>
+                <div class="col-md-2 col-md-offset-6">
+                    <span th:text="${#dates.format(message.date, 'EEEE, dd MMMM yyyy')}" class="pull-right"></span>
                 </div>
             </div>
         </div>
-        <div class="panel panel-login">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn pull-right btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a th:href="@{/message-to(id=${message.sender.id})}">Reply</a></li>
-                    <li><a th:href="@{/message-unread(id=${message.id})}">Mark as unread</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a th:href="@{/message-delete(id=${message.id})}">Delete</a></li>
-                </ul>
-            </div>
-            <a style="margin-right: 5px" th:href="@{/message-to(id=${message.sender.id})}" class="btn btn-default pull-right"><span class="fa fa-reply"></span> Reply</a>
-            <span th:utext="${message.messageText}"></span>
-        </div>
-        <a href="/messages" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
     </div>
+    <div class="panel panel-login">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn pull-right btn-default dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Action <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a th:href="@{/message-to(id=${message.sender.id})}">Reply</a></li>
+                <li><a th:href="@{/message-unread(id=${message.id})}">Mark as unread</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a th:href="@{/message-delete(id=${message.id})}">Delete</a></li>
+            </ul>
+        </div>
+        <a style="margin-right: 5px" th:href="@{/message-to(id=${message.sender.id})}"
+           class="btn btn-default pull-right"><span class="fa fa-reply"></span> Reply</a>
+        <span th:utext="${message.messageText}"></span>
+    </div>
+    <a href="/messages" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+</div>
 <br/>
 </body>
 </html>

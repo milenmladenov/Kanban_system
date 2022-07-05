@@ -5,21 +5,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 
-/**
- * Created by Oan on 15/03/2018.
- */
 public interface StorageService {
-    void init();
+  void init();
 
-    void store(MultipartFile file, Long id);
+  void store(MultipartFile file, Long id);
 
-    Path load(String filename);
+  Path load(String filename);
 
-    Resource loadAsResource(String filename);
+  Resource loadAsResource(String filename);
 
-    void deleteAll();
+  void deleteAll();
 
-    void deleteById(Long id);
+  void deleteById(Long id);
 
-    boolean isCorrectImageType(MultipartFile file);
+  boolean isCorrectImageType(MultipartFile file);
 }

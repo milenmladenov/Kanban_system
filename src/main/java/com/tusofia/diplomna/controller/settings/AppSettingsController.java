@@ -16,40 +16,41 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class AppSettingsController {
-    @Autowired
-    UserService userService;
+  @Autowired UserService userService;
 
-    @Autowired
-    TaskService taskService;
+  @Autowired TaskService taskService;
 
-    @Autowired
-    MessageService messageService;
+  @Autowired MessageService messageService;
 
-    @GetMapping("/appsettings")
-    public String getSettings(Model model, Authentication authentication, HttpServletRequest req) {
-        User userLogged = userService.findByUser(authentication.getName());
-        if (userLogged != null) {
-            model.addAttribute("loggedUser", userLogged);
-            userService.updateUserAttributes(userLogged, req);
-        }
-        return "appsettings";
+  @GetMapping("/appsettings")
+  public String getSettings(Model model, Authentication authentication, HttpServletRequest req) {
+    User userLogged = userService.findByUser(authentication.getName());
+    if (userLogged == null) {
+      return "redirect:/login";
     }
+    model.addAttribute("loggedUser", userLogged);
+    userService.updateUserAttributes(userLogged, req);
 
-    @PostMapping("/appsettings")
-    public String saveSettings(Model model, Authentication authentication,
-                               @RequestParam(value = "motivationText", required = false) String checkbox,
-                               @RequestParam(value = "smallCalendar", required = false) String smallCalendar,
-                               @RequestParam(value = "todoToCalendar", required = false) String todoToCalendar,
-                               @RequestParam(value = "showEmail", required = false) String showEmail) {
-        User userLogged = userService.findByUser(authentication.getName());
-        if (userLogged != null) {
-            model.addAttribute("loggedUser", userLogged);
-            if (showEmail == null) {
-                userService.setShowEmail(userLogged, false);
-            } else {
-                userService.setShowEmail(userLogged, true);
-            }
-        }
-        return "redirect:/appsettings?success";
+    return "appsettings";
+  }
+
+  @PostMapping("/appsettings")
+  public String saveSettings(
+      Model model,
+      Authentication authentication,
+      @RequestParam(value = "motivationText", required = false) String checkbox,
+      @RequestParam(value = "smallCalendar", required = false) String smallCalendar,
+      @RequestParam(value = "todoToCalendar", required = false) String todoToCalendar,
+      @RequestParam(value = "showEmail", required = false) String showEmail) {
+    User userLogged = userService.findByUser(authentication.getName());
+    if (userLogged != null) {
+      model.addAttribute("loggedUser", userLogged);
+      if (showEmail == null) {
+        userService.setShowEmail(userLogged, false);
+      } else {
+        userService.setShowEmail(userLogged, true);
+      }
     }
+    return "redirect:/appsettings?success";
+  }
 }

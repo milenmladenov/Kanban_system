@@ -14,17 +14,20 @@
     <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
 
 
-
     <div class="container">
         <h1>Manage users</h1>
         <div class="row">
             <div class="col-md-3">
                 <div class="panel panel-login">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href="/admin"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                        <li role="presentation"><a href="/admin/bugreports"><span class="glyphicon glyphicon-lock"></span> Bug Reports</a></li>
-                        <li role="presentation" class="active"><a href="/admin/manageusers"><span class="glyphicon glyphicon-user"></span> Manage users</a></li>
-                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent Activity</a></li>
+                        <li role="presentation"><a href="/admin"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                        </li>
+                        <li role="presentation"><a href="/admin/bugreports"><span
+                                class="glyphicon glyphicon-lock"></span> Bug Reports</a></li>
+                        <li role="presentation" class="active"><a href="/admin/manageusers"><span
+                                class="glyphicon glyphicon-user"></span> Manage users</a></li>
+                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent
+                            Activity</a></li>
                     </ul>
                 </div>
             </div>
@@ -45,13 +48,16 @@
                             <td th:text="${user.id}"></td>
                             <td><a th:href="@{/profile(id=${user.id})}" th:text="${user.username}"></a></td>
                             <td th:each="role : ${user.roles}">
-                                <span class="label label-success" th:if="${role.name}=='ROLE_ADMIN'">Administrator</span>
+                                <span class="label label-success"
+                                      th:if="${role.name}=='ROLE_ADMIN'">Administrator</span>
                                 <span class="label label-default" th:if="${role.name}=='ROLE_USER'">User</span>
                                 <span class="label label-info" th:if="${role.name}=='ROLE_TESTER'">Tester</span>
                             </td>
                             <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
                             <td>
-                                <a th:href="@{/admin/manageusers/}+${user.id}" data-toggle="tooltip" data-placement="right" title="Manage user" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-cog"></span>Manage</a>
+                                <a th:href="@{/admin/manageusers/}+${user.id}" data-toggle="tooltip"
+                                   data-placement="right" title="Manage user" class="btn btn-default btn-sm"><span
+                                        class="glyphicon glyphicon-cog"></span>Manage</a>
                             </td>
                         </tr>
                         </tbody>

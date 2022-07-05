@@ -15,12 +15,18 @@
             <div class="col-md-3">
                 <div class="panel panel-login">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href="/settings"><span class="glyphicon glyphicon-user"></span> Edit profile</a></li>
-                        <li role="presentation"><a href="/upload-avatar"><span class="far fa-image marginright"></span> Update avatar</a></li>
-                        <li role="presentation"><a href="/changepassword"><span class="glyphicon glyphicon-lock"></span> Change password</a></li>
-                        <li role="presentation" class="active"><a href="/appsettings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent activity</a></li>
-                        <li role="presentation"><a href="/report-bug"><span class="fa fa-bug"></span> Report bug</a></li>
+                        <li role="presentation"><a href="/settings"><span class="glyphicon glyphicon-user"></span> Edit
+                            profile</a></li>
+                        <li role="presentation"><a href="/upload-avatar"><span class="far fa-image marginright"></span>
+                            Update avatar</a></li>
+                        <li role="presentation"><a href="/changepassword"><span class="glyphicon glyphicon-lock"></span>
+                            Change password</a></li>
+                        <li role="presentation" class="active"><a href="/appsettings"><span
+                                class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent
+                            activity</a></li>
+                        <li role="presentation"><a href="/report-bug"><span class="fa fa-bug"></span> Report bug</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -43,28 +49,32 @@
                             <li class="list-group-item">
                                 Motivational messages for tasks
                                 <div class="material-switch pull-right">
-                                    <input id="motivationText" name="motivationText" type="checkbox" th:checked="${loggedUser.motivationalTaskMessage}"/>
+                                    <input id="motivationText" name="motivationText" type="checkbox"
+                                           th:checked="${loggedUser.motivationalTaskMessage}"/>
                                     <label for="motivationText" class="label-info"></label>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Small calendar on the home page
                                 <div class="material-switch pull-right">
-                                    <input id="smallCalendar" name="smallCalendar" type="checkbox" th:checked="${loggedUser.smallCalendar}"/>
+                                    <input id="smallCalendar" name="smallCalendar" type="checkbox"
+                                           th:checked="${loggedUser.smallCalendar}"/>
                                     <label for="smallCalendar" class="label-info"></label>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Import To-Do's in your calendar
                                 <div class="material-switch pull-right">
-                                    <input id="todoToCalendar" name="todoToCalendar" type="checkbox" th:checked="${loggedUser.todoToCalendar}"/>
+                                    <input id="todoToCalendar" name="todoToCalendar" type="checkbox"
+                                           th:checked="${loggedUser.todoToCalendar}"/>
                                     <label for="todoToCalendar" class="label-info"></label>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Show e-mail address on profile
                                 <div class="material-switch pull-right">
-                                    <input id="showEmail" name="showEmail" type="checkbox" th:checked="${loggedUser.showEmail}"/>
+                                    <input id="showEmail" name="showEmail" type="checkbox"
+                                           th:checked="${loggedUser.showEmail}"/>
                                     <label for="showEmail" class="label-info"></label>
                                 </div>
                             </li>

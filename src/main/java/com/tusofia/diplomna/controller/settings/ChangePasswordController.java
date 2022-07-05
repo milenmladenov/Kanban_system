@@ -15,40 +15,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 @Controller
 public class ChangePasswordController {
-    @Autowired
-    UserService userService;
+  @Autowired UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
+  @Autowired UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @GetMapping("/changepassword")
-    public String changePasswordPage(Model model, Authentication authentication, HttpServletRequest req) {
-        User userLogged = userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (userLogged != null) {
-            model.addAttribute("loggedUser", userLogged);
-            userService.updateUserAttributes(userLogged, req);
-        }
-        return "changepassword";
+  @GetMapping("/changepassword")
+  public String changePasswordPage(
+      Model model, Authentication authentication, HttpServletRequest req) {
+    User userLogged =
+        userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
+    if (userLogged == null) {
+      return "redirect:/login";
     }
+    model.addAttribute("loggedUser", userLogged);
+    userService.updateUserAttributes(userLogged, req);
 
-    @PostMapping("changepassword")
-    public String updatePassword(Authentication authentication, User user, @RequestParam String comfirmPass) {
-        User userLogged = userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (user.getPassword().length() >= 4 && user.getPassword().length() <= 25) {
-            if (user.getPassword().equals(comfirmPass)) {
-                userLogged.setPassword(passwordEncoder.encode(user.getPassword()));
-                userRepository.save(userLogged);
-                return "redirect:/changepassword?success";
-            } else {
-                return "redirect:/changepassword?comfirm";
-            }
-        } else {
-            return "redirect:/changepassword?error";
-        }
+    return "changepassword";
+  }
+
+  @PostMapping("changepassword")
+  public String updatePassword(
+      Authentication authentication, User user, @RequestParam String confirmPass) {
+    User userLogged =
+        userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
+    if (user.getPassword().length() >= 4 && user.getPassword().length() <= 25) {
+      if (user.getPassword().equals(confirmPass)) {
+        userLogged.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(userLogged);
+        return "redirect:/changepassword?success";
+      } else {
+        return "redirect:/changepassword?confirm";
+      }
+    } else {
+      return "redirect:/changepassword?error";
     }
+  }
 }

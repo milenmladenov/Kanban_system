@@ -20,37 +20,41 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class UploadAvatarController {
 
-    private final StorageService storageService;
+  private final StorageService storageService;
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    @Autowired
-    public UploadAvatarController(StorageService storageService) {
-        this.storageService = storageService;
+  @Autowired
+  public UploadAvatarController(StorageService storageService) {
+    this.storageService = storageService;
+  }
+
+  @GetMapping("/upload-avatar")
+  public String uploadAvatarPage(
+      Model model, Authentication authentication, HttpServletRequest req) {
+    User userLogged = userService.findByUser(authentication.getName());
+    if (userLogged == null) {
+      return "redirect:/login";
     }
+    model.addAttribute("loggedUser", userLogged);
+    userService.updateUserAttributes(userLogged, req);
+    return "/upload-avatar";
+  }
 
-    @GetMapping("/upload-avatar")
-    public String uploadAvatarPage(Model model, Authentication authentication, HttpServletRequest req) {
-        User userLogged = userService.findByUser(authentication.getName());
-        model.addAttribute("loggedUser", userLogged);
-        userService.updateUserAttributes(userLogged, req);
-        return "/upload-avatar";
+  @PostMapping("/upload-avatar")
+  public String handleFileUpload(
+      @RequestParam("file") MultipartFile file, Authentication authentication) {
+    User user = userService.findByUser(authentication.getName());
+    if (storageService.isCorrectImageType(file)) {
+      storageService.store(file, user.getId());
+      return "redirect:/upload-avatar?success";
+    } else {
+      return "redirect:/upload-avatar?wrongtype";
     }
+  }
 
-    @PostMapping("/upload-avatar")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, Authentication authentication) {
-        User user = userService.findByUser(authentication.getName());
-        if (storageService.isCorrectImageType(file)) {
-            storageService.store(file, user.getId());
-            return "redirect:/upload-avatar?success";
-        } else {
-            return "redirect:/upload-avatar?wrongtype";
-        }
-    }
-
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-        return ResponseEntity.notFound().build();
-    }
+  @ExceptionHandler(StorageFileNotFoundException.class)
+  public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+    return ResponseEntity.notFound().build();
+  }
 }
