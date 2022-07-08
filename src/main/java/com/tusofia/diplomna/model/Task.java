@@ -41,7 +41,7 @@ public class Task {
 
   private String status;
 
-  @ManyToOne @NotNull private User user;
+  @ManyToOne private User user;
 
   @ManyToOne private User creator;
 

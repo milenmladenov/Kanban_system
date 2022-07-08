@@ -60,7 +60,6 @@ public class AdminController {
     if (id != null) {
       User paramUser = userService.getById(id);
       model.addAttribute("paramUser", paramUser);
-      model.addAttribute("currentCountry", paramUser.getCountry());
     }
 
     return "edituser";

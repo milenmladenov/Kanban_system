@@ -33,5 +33,5 @@ public class UserDTO {
 
   private Plan plan;
 
-  private boolean isEnabled;
+  private boolean isActive;
 }

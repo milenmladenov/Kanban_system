@@ -41,6 +41,7 @@ public class MainController {
     User userLogged = getLoggedUser();
     List<Plan> creatorList = planService.findByCreator(userLogged);
     List<Plan> memberList = planService.findByMember(userLogged);
+    System.out.println(memberList);
     if (userLogged == null) {
       return "redirect:/login";
     }

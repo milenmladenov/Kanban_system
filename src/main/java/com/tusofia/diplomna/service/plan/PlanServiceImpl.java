@@ -6,6 +6,7 @@ import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.repository.MembersPlansRepository;
 import com.tusofia.diplomna.repository.PlanRepository;
+import com.tusofia.diplomna.repository.UserRepository;
 import com.tusofia.diplomna.service.message.MessageService;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class PlanServiceImpl implements PlanService {
   private UserService userService;
   private MembersPlansRepository membersPlansRepository;
   private MessageService messageService;
+  private UserRepository userRepository;
 
   @Autowired
   @Lazy

@@ -14,8 +14,8 @@ public class TaskDTO {
   @NotNull private Long id;
   @NotEmpty private String title;
   @NotEmpty private String description;
-
-  @NotEmpty private User user;
+  @NotEmpty private User creator;
+  private User user;
 
   @NotNull private Date targetDate;
 

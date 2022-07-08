@@ -11,7 +11,6 @@ import com.tusofia.diplomna.service.message.MessageService;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,10 +81,8 @@ public class TaskServiceImpl implements TaskService {
    */
   @Override
   public Task save(TaskDTO taskDTO, Long id) {
-    User userLogged =
-        userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
     Task task = new Task();
-    task.setCreator(userLogged);
+    task.setCreator(taskDTO.getCreator());
     task.setUser(taskDTO.getUser());
     task.setTitle(taskDTO.getTitle());
     task.setDescription(taskDTO.getDescription());

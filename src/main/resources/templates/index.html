@@ -35,13 +35,6 @@
                                autofocus="autofocus"
                                required="required"/>
                     </div>
-                    <!--            <div class="form-group">-->
-                    <!--                <select class="form-control" >-->
-                    <!--                    <option value="0">Add Member</option>-->
-                    <!--                    <option th:each="member : ${users}" th:field="*{member}"  th:value="${member.id}" th:text="${member.firstName}  + ' ' + ${member.lastName}"></option>-->
-                    <!--                </select>-->
-                    <!--            </div>-->
-
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6 col-sm-offset-3 ">
@@ -59,7 +52,7 @@
         </div>
     </div>
     <br>
-    <h3 class="greentext">All plans:</h3>
+    <h3 class="greentext">Plans created by you:</h3>
     </br>
     <div class="row">
         <div th:each="plan : ${createdPlans}" class="panel panel-login list-inline-item">
@@ -75,6 +68,10 @@
                 </ul>
             </a>
         </div>
+<br>
+        <h3 class="greentext">Plans you are member of:</h3>
+        </br>
+        <div class="row">
         <div th:each="plan : ${memberPlans}" class="panel panel-login list-inline-item">
             <a th:href="@{/plan(id=${plan.id})}" style="text-decoration: none; cursor: pointer;">
                 <ul class="list-inline">
@@ -88,6 +85,7 @@
                 </ul>
             </a>
         </div>
+            </div>
 
     </div>
 </div>

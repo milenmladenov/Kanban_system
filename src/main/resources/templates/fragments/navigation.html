@@ -14,7 +14,6 @@
         <!-- Collection of nav links, forms, and other content for toggling -->
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li sec:authorize="isAuthenticated()" class="nav-item "><a class="nav-link" href="/task-list">Tasks
                     <span
                             th:text="${session.tasksLeft}" class="badge badge-notify "></span></a></li>

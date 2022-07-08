@@ -2,8 +2,9 @@ package com.tusofia.diplomna.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.CascadeType;
@@ -23,7 +24,8 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -39,7 +41,6 @@ public class User {
   private String lastName;
   @Email @JsonIgnore private String email;
   @JsonIgnore private String password;
-  private int bugsReported;
   private int tasksMade;
   private int tasksCompleted;
   private int tasksReceived;
@@ -47,15 +48,8 @@ public class User {
   private int messagesReceived;
   private int messagesSent;
   private Date registrationDate;
-  private String country;
-  private int age;
   private boolean showEmail = true;
-  private boolean isEnabled;
-  // Social
-  private String skype;
-  private String twitter;
-  private String github;
-  private String facebook;
+  private boolean isActive;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(
@@ -74,6 +68,7 @@ public class User {
 
   @OneToOne private Plan createdPlan;
 
+
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
       name = "member_plans",
@@ -82,7 +77,4 @@ public class User {
   private List<Plan> plans;
 
   public User(User member) {}
-  //    public User(String username, String password,String email, Collection<? extends
-  // GrantedAuthority> mapRolesToAuthorities) {
-  //    }
 }

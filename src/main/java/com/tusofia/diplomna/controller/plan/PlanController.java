@@ -32,6 +32,11 @@ public class PlanController {
 
   @Autowired private TaskService taskService;
 
+  /**
+   * Get the currently logged in user from the database.
+   *
+   * @return The user object of the currently logged in user.
+   */
   public User getLoggedUser() {
     return userService.findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
   }
@@ -96,6 +101,7 @@ public class PlanController {
       model.addAttribute("plan", plan);
       model.addAttribute("task", new Task());
     }
+    taskDTO.setCreator(userLogged);
     taskDTO.setPlan(plan);
     taskService.save(taskDTO, userLogged.getId());
     return "redirect:/plan?id=" + plan.getId();

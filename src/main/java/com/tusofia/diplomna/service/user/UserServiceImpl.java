@@ -90,9 +90,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void addBugReport(User userLogged) {
-    userLogged.setBugsReported(userLogged.getBugsReported() + 1);
     userRepository.save(userLogged);
   }
+
 
   @Override
   public User editByUser(
@@ -119,10 +119,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public User setSocialSettings(
       User user, String facebook, String twitter, String skype, String github) {
-    user.setFacebook(facebook);
-    user.setTwitter(twitter);
-    user.setSkype(skype);
-    user.setGithub(github);
     return userRepository.save(user);
   }
 
@@ -215,11 +211,6 @@ public class UserServiceImpl implements UserService {
     if (user == null) {
       throw new UsernameNotFoundException("No user found with username: " + username);
     }
-
-    boolean enabled = true;
-    boolean accountNonExpired = true;
-    boolean credentialsNonExpired = true;
-    boolean accountNonLocked = true;
 
     return new org.springframework.security.core.userdetails.User(
         user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
