@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
 <head th:replace="fragments/header :: header"></head>
 <title>[[${plan.title}]]</title>
 <body>
@@ -10,7 +10,7 @@
     <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         + Add New Task
     </button>
-    <a th:href="@{/members(planId=${plan.id})}">
+    <a th:href="@{__${plan.id}__/members}">
         <button type="button" class="btn btn-primary">
             + Add Member
         </button>
@@ -21,7 +21,8 @@
         <div class="col-sm" style="border-right:1px solid #000;">
             <br>
             <div style="margin-left: 106px;">NOT STARTED :</div>
-            <div th:each="taskNotStarted : ${notStartedTasks}" style="border-right:1px solid #000;height: 160px;width: 341.06667px;"
+            <div th:each="taskNotStarted : ${notStartedTasks}"
+                 style="border-right:1px solid #000;height: 160px;width: 341.06667px;"
                  class="  list-inline-item panel panel-login">
 
                 <ul style="padding-left: 0px;">
@@ -45,7 +46,8 @@
         <div class="col-sm" style="border-right:1px solid #000;width: 351px;">
             <br>
             <div style="margin-left: 121px;">IN PROGRESS :</div>
-            <div th:each="inProgressTask : ${inProgressTasks}" style="border-right:1px solid #000;height: 160px;width: 341.06667px;"
+            <div th:each="inProgressTask : ${inProgressTasks}"
+                 style="border-right:1px solid #000;height: 160px;width: 341.06667px;"
                  class=" list-inline-item panel panel-login">
                 <ul style="padding-left: 0px;">
                     <li style="list-style:none; " class="list-group-item">
@@ -134,35 +136,87 @@
     </div>
 </div>
 <div id="myModal2" class="modal2">
-
-    <!-- Modal content -->
     <div class="modal-content2">
         <span class="close2">&times;</span>
+        Creator:
+        <div class="list-group-item"><img class="img-circle margin-right" width="32" height="32"
+                                          th:src="@{/api/avatar/__${creator.id}__}"/><a
+                th:href="@{/profile(id=${creator.id})}"> [[${plan.creator.firstName}]]
+            [[${plan.creator.lastName}]]</a></div>
+        </br>
+        <div>Members:</div>
         <div th:each="member : ${members}">
             <ul style="padding-left: 0px;">
                 <li style="list-style:none; " class="list-group-item">
-                    <p>
+                    <p style="display:inline;">
                         <img class="img-circle margin-right" width="32" height="32"
                              th:src="@{/api/avatar/__${member.id}__}"/>
                         <a th:href="@{/profile(id=${member.id})}"> [[${member.firstName}]]
-                            [[${member.lastName}]]</a></td>
+                            [[${member.lastName}]]</a>
+
+
                     </p>
+                    <div style=" display:inline;"><button  type="button" th:id="myBtn3 + ${member.id}"
+                                                                              class=" btn btn-primary">
+                        Remove
+                    </button></div>
+                    <div th:id="myModal3 + ${member.id}" style="display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1; /* Sit on top */
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);">
+                        <div style="background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 741px;">
+                            <span th:class="close3 + ${member.id}">&times;</span>
+                            <h3>Do you want to remove [[${member.firstName}]] [[${member.lastName}]] from this
+                                plan?</h3>
+                            <form th:action="@{/plan(id=${plan.id})}" th:object="${user}" th:method="delete">
+                                <input type="hidden" name="memberId" th:value="${member.id}"/>
+                                <input type="submit" value="YES">
+                            </form>
+                            <script th:inline="javascript">
+/*<![CDATA[*/
+var modal3[[${member.id}]]= document.getElementById("myModal3[[${member.id}]]");
+var btn3[[${member.id}]] = document.getElementById("myBtn3[[${member.id}]]");
+var span3[[${member.id}]] = document.getElementsByClassName("close3[[${member.id}]]")[0];
+
+btn3[[${member.id}]].onclick = function() {
+  modal3[[${member.id}]].style.display = "block";
+}
+span3[[${member.id}]].onclick = function() {
+  modal3[[${member.id}]].style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal3[[${member.id}]]){
+    modal3[[${member.id}]].style.display = "none";
+  }
+}
+/*]]>*/
+
+
+
+                            </script>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
+
         </div>
     </div>
-
 </div>
-
-</div>
-</div>
-
-
-</div>
-
 
 <script>
-var modal = document.getElementById("myModal");
+    var modal = document.getElementById("myModal");
 var btn = document.getElementById("myBtn");
 var span = document.getElementsByClassName("close-modal")[0];
 btn.onclick = function() {
@@ -171,10 +225,6 @@ btn.onclick = function() {
 span.onclick = function() {
   modal.style.display = "none";
 }
-
-
-<!-- A javascript code that is used to show the modal2 when the button myBtn2 is clicked and to close the modal2 when the
-span2 is clicked. -->
 
 var modal2 = document.getElementById("myModal2");
 var btn2 = document.getElementById("myBtn2");
@@ -190,6 +240,7 @@ window.onclick = function(event) {
     modal2.style.display = "none";
   }
 }
+
 
 
 </script>

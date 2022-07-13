@@ -24,6 +24,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
   List<Task> findByPlanAndStatusIs(Plan plan, String status);
 
+  List<Task> findByUserAndStatusIs(User user,String status);
+
   Task getById(Long id);
 
   void deleteById(Long id);

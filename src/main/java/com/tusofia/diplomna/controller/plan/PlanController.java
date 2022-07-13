@@ -10,10 +10,13 @@ import com.tusofia.diplomna.service.plan.PlanService;
 import com.tusofia.diplomna.service.task.TaskService;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,18 +53,16 @@ public class PlanController {
    */
 
   @GetMapping("/plan")
-  public String getPlanById(Model model, @RequestParam(required = false) Long id) {
+  public String getPlanById(Model model, @RequestParam(required = false) Long id,@Param("fullName") String fullName) {
     User userLogged = getLoggedUser();
     if(userLogged == null){
       return "redirect:/";
     }
     List<User> users = userService.findAll();
     model.addAttribute("loggedUser", userLogged);
-    // This is a check if the id is not null. If it is not null, it will get the plan by id, get all the members of the
-    // plan, get all the tasks that are not started, in progress and done.
     if (id != null) {
       Plan plan = planService.getById(id);
-        List<User> members = userService.findAllByPlans(plan);
+      List<User> members = userService.findAllByPlans(plan,fullName);
       List<Task> taskListNotStarted = taskService.findByPlanAndStatusIs(plan, "NOT STARTED");
       List<Task> taskListInProgress = taskService.findByPlanAndStatusIs(plan, "IN PROGRESS");
       List<Task> taskListDone = taskService.findByPlanAndStatusIs(plan, "DONE");
@@ -69,6 +70,7 @@ public class PlanController {
       // plan, get all the tasks that are not started, in progress and done.
       if (plan != null) {
         model.addAttribute("members", members);
+        model.addAttribute("creator",plan.getCreator());
         model.addAttribute("plan", plan);
         model.addAttribute("task", new Task());
         model.addAttribute("users", users);
@@ -114,18 +116,20 @@ public class PlanController {
    * @param planId the id of the plan that we want to add members to
    * @return A list of users that are not members of the plan.
    */
-  @GetMapping("/members")
-  public String addMemberListPage(Model model, @RequestParam Long planId) {
+  @GetMapping("{planId}/members")
+  public String addMemberListPage(Model model, @PathVariable Long planId, @Param("fullName") String fullName) {
     User userLogged = getLoggedUser();
     Plan plan = planService.getById(planId);
-    List<User> users = userService.findAll();
-    List<User> members = userService.findAllByPlans(plan);
+
+    List<User> members = userService.findAllByPlans(plan,fullName);
+    List<User> users = userService.searchByFirstNameAndLastNameLike(fullName);
     users.remove(plan.getCreator());
     users.removeAll(members);
     model.addAttribute("loggedUser", userLogged);
     model.addAttribute("plan", plan);
     model.addAttribute("users", users);
     model.addAttribute("members", members);
+    model.addAttribute("fullName",fullName);
     model.addAttribute("memberExistsMessage", "This User is already added to the plan !");
     return "members";
   }
@@ -147,6 +151,15 @@ public class PlanController {
       model.addAttribute("member", member);
     }
     userService.addMember(plan, member);
-    return "redirect:/members?planId=" + plan.getId();
+    return "redirect:/" + plan.getId() + "/members";
   }
+
+  @DeleteMapping("/plan")
+  public String removeMember(@RequestParam(required = false) Long id,Long memberId){
+    Plan plan = planService.getById(id);
+    User member = userService.getById(memberId);
+    userService.removeMember(plan,member);
+    return "redirect:/plan?id=" + plan.getId();
+  }
+
 }

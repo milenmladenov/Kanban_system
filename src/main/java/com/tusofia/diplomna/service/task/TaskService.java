@@ -20,7 +20,7 @@ public interface TaskService {
 
   Task uncompleteTaskById(Long id);
 
-  void changeStatus(Long id);
+  void changeStatus(Task task);
 
   Task assignTo(User user, Task task);
 
@@ -45,4 +45,6 @@ public interface TaskService {
   void updateAttributes(User user, HttpServletRequest req);
 
   List<Task> findByPlanAndStatusIs(Plan plan, String status);
+
+  List<Task> findByUserAndStatusIs(User user,String status);
 }

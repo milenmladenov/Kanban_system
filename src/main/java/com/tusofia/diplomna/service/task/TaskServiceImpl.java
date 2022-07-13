@@ -67,8 +67,7 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public void changeStatus(Long id) {
-    Task task = taskRepository.getById(id);
+  public void changeStatus(Task task) {
     taskRepository.save(task);
   }
 
@@ -198,7 +197,20 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
+  public List<Task> findByUserAndStatusIs(User user,String status) {
+    return taskRepository.findByUserAndStatusIs(user,status);
+  }
+
+  @Override
   public Task assignTo(User user, Task task) {
+    task.setApproved(true);
+    // Increment stats for assign/received
+    userService.incrementTasksReceived(user);
+    User creatorUser = userService.getById(task.getCreator().getId());
+    creatorUser.setTasksAssigned(user.getTasksAssigned() + 1);
+    userRepository.save(user);
+    //         Increment the user (who got the task)'s tasksCreated
+    userService.incrementTasksCreated(user);
     task.setUser(user);
     return taskRepository.save(task);
   }

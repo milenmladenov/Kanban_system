@@ -6,6 +6,7 @@ import com.tusofia.diplomna.model.User;
 import com.tusofia.diplomna.service.plan.PlanService;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,11 +38,10 @@ public class MainController {
    * @return The index page is being returned.
    */
   @GetMapping("/")
-  public String planList(Model model) {
+  public String planList(Model model,@Param("title") String title) {
     User userLogged = getLoggedUser();
-    List<Plan> creatorList = planService.findByCreator(userLogged);
-    List<Plan> memberList = planService.findByMember(userLogged);
-    System.out.println(memberList);
+    List<Plan> creatorList = planService.findByCreator(userLogged,title);
+    List<Plan> memberList = planService.findByMember(userLogged,title);
     if (userLogged == null) {
       return "redirect:/login";
     }
@@ -64,8 +64,6 @@ public class MainController {
   @PostMapping("/")
   public String addNewPlan(Model model, PlanDTO planDto) {
     User userLogged = getLoggedUser();
-    model.addAttribute("plan", new Plan());
-    model.addAttribute("loggedUser", userLogged);
     planService.save(planDto, userLogged.getId());
     return "redirect:/";
   }

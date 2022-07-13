@@ -23,10 +23,6 @@
                             Change password</a></li>
                         <li role="presentation"><a href="/appsettings"><span class="glyphicon glyphicon-cog"></span>
                             Settings</a></li>
-                        <li role="presentation"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Recent
-                            activity</a></li>
-                        <li role="presentation"><a href="/report-bug"><span class="fa fa-bug"></span> Report bug</a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -54,6 +50,7 @@
                                     <input autocomplete="off" class="form-control" th:value="${loggedUser.firstName}"
                                            th:field="*{firstName}"></input>
                                 </div>
+                                <br>
                                 <div class="col-md-2">
                                     Last name:
                                 </div>
@@ -63,70 +60,6 @@
                                 </div>
                             </div>
                             <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Age:
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="form-control" th:value="${loggedUser.age}" th:field="*{age}"
-                                           type="number" min="0" max="100"></input>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Country:
-                                </div>
-                                <div class="col-md-3">
-                                    <!--<div class="bfh-selectbox bfh-countries" th:field="*{country}" th:attr="data-country=${currentCountry}" data-flags="true">-->
-                                    <!--</div>-->
-                                    <select class="input-medium bfh-countries form-control"
-                                            th:attr="data-country=${currentCountry}" th:field="*{country}"></select>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span class="fab fa-facebook marginright"></span> Facebook:
-                                </div>
-                                <div class="col-md-3">
-                                    <input autocomplete="off" class="form-control" th:value="${loggedUser.facebook}"
-                                           th:field="*{facebook}"></input>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span class="fab fa-twitter marginright"></span> Twitter:
-                                </div>
-                                <div class="col-md-3">
-                                    <input autocomplete="off" class="form-control" th:value="${loggedUser.twitter}"
-                                           th:field="*{twitter}"></input>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span class="fab fa-skype marginright"></span> Skype:
-                                </div>
-                                <div class="col-md-3">
-                                    <input autocomplete="off" class="form-control" th:value="${loggedUser.skype}"
-                                           th:field="*{skype}"></input>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span autocomplete="off" class="fab fa-github marginright"></span> GitHub:
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="form-control" th:value="${loggedUser.github}"
-                                           th:field="*{github}"></input>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
                     <div class="col-sm-6 col-sm-offset-3">
                         <input type="submit"
                                name="task-submit"

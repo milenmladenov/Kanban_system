@@ -1,7 +1,6 @@
 package com.tusofia.diplomna.service.plan;
 
 import com.tusofia.diplomna.dto.PlanDTO;
-import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 
@@ -17,17 +16,11 @@ public interface PlanService {
 
   List<Plan> getAll();
 
-  List<Plan> findByCreator(User user);
+  List<Plan> findByCreator(User user,String title);
 
-  List<MembersPlans> memberList(Plan plan);
-
-  List<Plan> findByMember(User member);
+  List<Plan> findByMember(User member,String title);
 
   Plan findPlanByTaskId(Long id);
 
-  List<MembersPlans> findByPlan(Plan plan);
-
   void removeMember(User user, Long id);
-
-  List<MembersPlans> getMemberById(Long id);
 }

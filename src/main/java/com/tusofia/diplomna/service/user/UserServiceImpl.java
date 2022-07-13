@@ -1,6 +1,7 @@
 package com.tusofia.diplomna.service.user;
 
 import com.tusofia.diplomna.dto.UserDTO;
+import com.tusofia.diplomna.exception.UserNotFoundException;
 import com.tusofia.diplomna.model.Message;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.Role;
@@ -69,6 +70,7 @@ public class UserServiceImpl implements UserService {
     user.setEmail(registration.getEmail());
     user.setPassword(passwordEncoder.encode(registration.getPassword()));
     user.setRegistrationDate(new Date(Calendar.getInstance().getTime().getTime()));
+    user.setFullName(registration.getFirstName() + " " + registration.getLastName());
     return userRepository.save(user);
   }
 
@@ -92,7 +94,6 @@ public class UserServiceImpl implements UserService {
   public void addBugReport(User userLogged) {
     userRepository.save(userLogged);
   }
-
 
   @Override
   public User editByUser(
@@ -169,8 +170,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> findAllByPlans(Plan plan) {
-    return userRepository.findAllByPlans(plan);
+  public List<User> findAllByPlans(Plan plan, String fullName) {
+    if (fullName == null) {
+      return userRepository.findAllByPlans(plan);
+    } else {
+      return userRepository.searchByFullNameLikeAndPlansIs(fullName, plan);
+    }
   }
 
   /**
@@ -191,11 +196,36 @@ public class UserServiceImpl implements UserService {
     notifyMessage.setOpened(0);
     notifyMessage.setSubject("You have been added to new plan: " + plan.getTitle());
     notifyMessage.setMessageText(
-        "<p>Hello,</p><br/>You have been added to: <blockquote>"
+        "<p>Hello,</p><br/>You have been added to: <a href=\"/plan?id="
+            + plan.getId()
+            + "\">"
             + plan.getTitle()
-            + "</blockquote> You can check the existing tasks !<small><em></br>This is an automated message and not written by the user self.</em></small>");
+            + "</a>"
+            + "</br>. You can check the existing tasks !<small><em></br>This is an automated message and not written by the user self.</em></small>");
     messageService.autoreply(notifyMessage);
     user.getPlans().add(plan);
+    plan.getMembers().add(user);
+    return userRepository.save(user);
+  }
+
+  @Override
+  public User removeMember(Plan plan, User user) {
+    User userLogged = findByUser(SecurityContextHolder.getContext().getAuthentication().getName());
+    // Creating a new message object, setting the fields, and saving the message.
+    Message notifyMessage = new Message();
+    notifyMessage.setReceiver(user);
+    notifyMessage.setSender(userLogged);
+    notifyMessage.setDate(new Date(Calendar.getInstance().getTime().getTime()));
+    notifyMessage.setOpened(0);
+    notifyMessage.setSubject("You have been removed from plan: " + plan.getTitle());
+    notifyMessage.setMessageText(
+        "<p>Hello,</p><br/>You have been removed from: "
+            + plan.getTitle()
+            + "</a>"
+            + "<br/><small><em></br>This is an automated message and not written by the user self.</em></small>");
+    messageService.autoreply(notifyMessage);
+    user.getPlans().remove(plan);
+    plan.getMembers().remove(user);
     return userRepository.save(user);
   }
 
@@ -214,6 +244,40 @@ public class UserServiceImpl implements UserService {
 
     return new org.springframework.security.core.userdetails.User(
         user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+  }
+
+  @Override
+  public List<User> searchByFirstNameAndLastNameLike(String name) {
+    if (name == null) {
+      return userRepository.findAll();
+    } else {
+      return userRepository.searchByFullNameLike(name);
+    }
+  }
+
+  @Override
+  public void updateResetPasswordToken(String token, String email) throws UserNotFoundException {
+    User user = userRepository.findByEmail(email);
+    if (user != null) {
+      user.setResetPasswordToken(token);
+      userRepository.save(user);
+    } else {
+      throw new UserNotFoundException("Could not find any user with the email " + email);
+    }
+  }
+
+  @Override
+  public User getByResetPasswordToken(String token) {
+    return userRepository.findByResetPasswordToken(token);
+  }
+
+  @Override
+  public void updatePassword(User user, String newPassword) {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String encodedPassword = passwordEncoder.encode(newPassword);
+    user.setPassword(encodedPassword);
+    user.setResetPasswordToken(null);
+    userRepository.save(user);
   }
 
   /**

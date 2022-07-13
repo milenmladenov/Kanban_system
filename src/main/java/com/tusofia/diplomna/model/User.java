@@ -48,8 +48,10 @@ public class User {
   private int messagesReceived;
   private int messagesSent;
   private Date registrationDate;
+  private String fullName;
   private boolean showEmail = true;
   private boolean isActive;
+  private String resetPasswordToken;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(

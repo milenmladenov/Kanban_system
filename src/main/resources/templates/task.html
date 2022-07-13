@@ -13,7 +13,7 @@
             <p class="display-8">Target date : [[${task.targetDate}]]</p></h1>
         <br>
         Working status : [[${task.status}]]<br>
-        <div> Change status
+       <span th:if="${loggedUser == task.user}">  Change status
             <form style="display:inline" th:action="@{/task(taskId=${task.id})}" th:method="put" th:object="${task}">
                 <select th:if="${task.status == 'NOT STARTED'}" th:field="*{status}">
                     <option value="IN PROGRESS">IN PROGRESS</option>
@@ -28,18 +28,24 @@
                 <input class="form-control btn btn-primary" type="submit" value="CHANGE" style="
     width: 176px;
 ">
-            </form>
+            </form></span>
             <a href="#comment">
                 <button type="button" class="btn btn-info">Add Comment</button>
             </a>
-        </div>
+            <a th:href="@{/task-edit(id=${task.id})}" data-toggle="tooltip" data-placement="left"
+               title="Edit task" class="btn btn-warning btn-sm"><span
+                    class="marginleft glyphicon fa fa-pencil-alt"></span></a>
+
+        </br>
         <span th:if="${task.assigned == true}">Assigned to: <b>[[${task.user.firstName}]] [[${task.user.lastName}]]</b>
         </span>
-        <span th:if="${task.assigned == false}"> <a th:href="@{/task-assign(id=${task.id})}"
+        <span > <a th:href="@{/__${task.id}__/task-assign}"
                                                     class="btn btn-success btn-sm">
             <span class="fas fa-calendar-check"></span> Assign task
         </a>
        </span>
+        <div class="edit"><a th:href="@{/task-edit(id=${task.id})}"><i
+                class="fas fa-pencil-alt fa-lg faa-shake animated-hover"></i></a></div>
 
     </div>
     <div>

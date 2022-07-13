@@ -1,10 +1,8 @@
 package com.tusofia.diplomna.service.plan;
 
 import com.tusofia.diplomna.dto.PlanDTO;
-import com.tusofia.diplomna.model.MembersPlans;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
-import com.tusofia.diplomna.repository.MembersPlansRepository;
 import com.tusofia.diplomna.repository.PlanRepository;
 import com.tusofia.diplomna.repository.UserRepository;
 import com.tusofia.diplomna.service.message.MessageService;
@@ -21,20 +19,16 @@ public class PlanServiceImpl implements PlanService {
 
   private PlanRepository planRepository;
   private UserService userService;
-  private MembersPlansRepository membersPlansRepository;
   private MessageService messageService;
   private UserRepository userRepository;
 
   @Autowired
   @Lazy
   public PlanServiceImpl(
-      PlanRepository planRepository,
-      UserService userService,
-      MembersPlansRepository membersPlansRepository,
-      MessageService messageService) {
+      PlanRepository planRepository, UserService userService, MessageService messageService) {
+
     this.planRepository = planRepository;
     this.userService = userService;
-    this.membersPlansRepository = membersPlansRepository;
     this.messageService = messageService;
   }
 
@@ -71,18 +65,21 @@ public class PlanServiceImpl implements PlanService {
   }
 
   @Override
-  public List<Plan> findByCreator(User user) {
-    return planRepository.findByCreator(user);
+  public List<Plan> findByCreator(User user, String title) {
+    if (title == null) {
+      return planRepository.findByCreator(user);
+    } else {
+      return planRepository.searchByTitleLikeAndCreatorIs(title,user);
+    }
   }
 
   @Override
-  public List<MembersPlans> memberList(Plan plan) {
-    return membersPlansRepository.getAllMemberByPlan(plan);
-  }
-
-  @Override
-  public List<Plan> findByMember(User member) {
-    return planRepository.findAllByMembers(member);
+  public List<Plan> findByMember(User member, String title) {
+    if (title == null) {
+      return planRepository.findByMembers(member);
+    } else {
+      return planRepository.searchByTitleLikeAndMembersIs(title,member);
+    }
   }
 
   @Override
@@ -91,17 +88,7 @@ public class PlanServiceImpl implements PlanService {
   }
 
   @Override
-  public List<MembersPlans> findByPlan(Plan plan) {
-    return membersPlansRepository.findByPlan(plan);
-  }
-
-  @Override
   public void removeMember(User user, Long id) {
     User planMember = userService.getById(id);
-  }
-
-  @Override
-  public List<MembersPlans> getMemberById(Long id) {
-    return null;
   }
 }

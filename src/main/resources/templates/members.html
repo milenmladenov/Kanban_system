@@ -6,6 +6,7 @@
 <div th:replace="fragments/navigation :: navigation"></div>
 
 <div class="container">
+    <div class="panel panel-login table-responsive">
     <div th:if="${param.success}">
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -13,6 +14,15 @@
         </div>
     </div>
     <a th:href="@{/plan(id=${plan.id})}">Back to Plan</a><br>
+    <form class="navbar-form navbar-right" th:action="@{/__${plan.id}__/members}">
+        <div class="form-group"
+             style="margin-left: 600px;display:inline;margin-bottom: 27px;border-bottom-width: 15px;">
+            <input style=" width: 326px;display:inline;" type="text" name="fullName" class="form-control" size="50" th:value="${fullName}" required/>
+        </div>
+        <input type="submit" value="Search" class="btn btn-default"/>
+    </form>
+    </br>
+
     <p class="display - 3">Users:</p>
     <div th:each="user : ${users}">
         <form style="display:inline" th:action="@{/members(memberId=${user.id})}" method="post" th:object="${user}">
@@ -22,10 +32,12 @@
                                                                   value="ADD" style="width: 176px;"/></p>
         </form>
     </div>
+    <div th:each="searchUser : ${searchedUsers}">
+        <ul>
+            <li> [[${searchUser.fullName}]]</li>
+        </ul>
+    </div>
+    </div>
 </div>
-<script>
-
-
-</script>
 </body>
 </html>

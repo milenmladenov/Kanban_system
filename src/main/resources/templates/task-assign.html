@@ -8,6 +8,15 @@
 
 <div class="container">
     <h1><span class="glyphicon glyphicon-edit"></span> Assign task</h1>
+    <form class="navbar-form navbar-right" th:action="@{/__${task.id}__/task-assign}">
+        <div class="form-group"
+             style="margin-left: 600px;display:inline;margin-bottom: 27px;border-bottom-width: 15px;">
+            <input style="width: 326px;display:inline;" type="text" name="fullName" class="form-control" size="50"
+                   th:value="${fullName}" required/>
+        </div>
+        <input type="submit" value="Search" class="btn btn-default"/>
+    </form>
+    </br>
     <strong class="marginright">Assign To: </strong>
     <div class="container" th:each="member : ${members}">
         <form th:action="@{/task-assign(id=${task.id})}" th:object="${task}" method="post">
@@ -15,8 +24,8 @@
                 <div class="form-group">
                     <input type="hidden" name="taskId" th:value="${task.id}"/>
                     <input type="hidden" name="userId" th:value="${member.id}"/>
-                    <p> [[${member.firstName}]] [[${member.lastName}]]</p>
-                    <input type="submit" name="task-submit" id="task-submit" class="form-control btn btn-info"
+                    <p style="display:inline;"> [[${member.firstName}]] [[${member.lastName}]]</p>
+                    <input style="width: 226px;" type="submit" name="task-submit" id="task-submit" class="form-control btn btn-info"
                            value="Assign task"/>
                 </div>
             </div>

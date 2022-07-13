@@ -12,18 +12,21 @@ import com.tusofia.diplomna.service.plan.PlanService;
 import com.tusofia.diplomna.service.task.TaskService;
 import com.tusofia.diplomna.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
@@ -50,26 +53,23 @@ public class TaskController {
     if (userLogged == null) {
       return "redirect:/login";
     }
-    model.addAttribute("task", new Task());
     // Get uncompleted tasks and sort by date
-    List<Task> taskList = taskService.findByUserAndCompletedIsFalseAndApprovedIsTrue(userLogged);
+    List<Task> notStarted = taskService.findByUserAndStatusIs(userLogged,"NOT STARTED");
+    List<Task> inProgress = taskService.findByUserAndStatusIs(userLogged,"IN PROGRESS");
+    List<Task> taskList = new ArrayList<>();
+    taskList.addAll(notStarted);
+    taskList.addAll(inProgress);
     taskList.sort(Comparator.comparing(Task::getTargetDate));
     // get completed tasks and sort by date
     List<Task> completedTasksList =
-        taskService.findByUserAndCompletedIsTrueAndApprovedIsTrue(userLogged);
+        taskService.findByUserAndStatusIs(userLogged,"DONE");
     completedTasksList.sort(Comparator.comparing(Task::getTargetDate));
 
-    // Check for pending tasks
-    List<Task> pendingTasks = taskService.findByUserAndApprovedIsFalse(userLogged);
-    model.addAttribute("pendingTasks", pendingTasks);
-    model.addAttribute("pendingTasksCount", pendingTasks.size());
-
-    if (userLogged != null) {
       model.addAttribute("loggedUser", userLogged);
       model.addAttribute("tasks", taskList);
       model.addAttribute("completedTasks", completedTasksList);
       userService.updateUserAttributes(userLogged, req);
-    }
+
     String today = new Date(Calendar.getInstance().getTime().getTime()).toString();
     model.addAttribute("today", today);
     return "task-list";
@@ -102,39 +102,30 @@ public class TaskController {
   }
 
   @DeleteMapping("/task-list")
-  public String deleteTaskFromList(@RequestParam Long id, Authentication authentication) {
+  public String deleteTaskFromList(@RequestParam Long id) {
     User userLogged = getLoggedUser();
-    // Check if it's user's task
-    if (taskService.findByUser(getLoggedUser()).contains(taskService.getOne(id))) {
-      taskService.deleteTaskById(id);
-      userService.decrementTasksCreated(userLogged);
-      if (taskService.getById(id).isCompleted()) {
-        userService.decrementTasksCompleted(userLogged);
-      }
+    Task task = taskService.getById(id);
+    taskService.deleteTaskById(task.getId());
       return "redirect:/task-list?deleted";
-    } else {
-      return "redirect:/task-list?notfound";
-    }
   }
 
   /**
    * This function is used to assign a task to a user
    *
    * @param model The model is an object that contains the data that will be displayed on the view.
-   * @param taskDTO This is a DTO object that will be used to transfer data from the frontend to the backend.
-   * @param id the id of the task to be assigned
-   * @param userId the id of the user to assign the task to
+   ** @param id the id of the task to be assigned
    * @return A String
    */
-  @GetMapping("/task-assign")
-  public String assignTaskPage(Model model, TaskDTO taskDTO, @RequestParam Long id, Long userId) {
+  @GetMapping("/{id}/task-assign")
+  public String assignTaskPage(Model model, @PathVariable Long id, @Param("fullName") String fullName ) {
     User userLogged = getLoggedUser();
     if (userLogged == null) {
       return "redirect:/login";
     }
     Task task = taskService.getById(id);
     Plan plan = task.getPlan();
-    List<User> membersPlansList = userService.findAllByPlans(plan);
+    List<User> membersPlansList = userService.findAllByPlans(plan,fullName);
+    membersPlansList.remove(task.getUser());
     List<Task> notAssignedTasks = taskRepository.findByPlanAndAssignedIsFalse(plan);
     if (task != null) {
       model.addAttribute("task", task);
@@ -151,13 +142,12 @@ public class TaskController {
    * The function assigns a task to a user
    *
    * @param model the model object that will be passed to the view
-   * @param id the id of the task
    * @param userId the id of the user to whom the task is assigned
    * @param taskDTO the task that is being assigned
    * @return A redirect to the profile page of the user that was assigned the task.
    */
   @PostMapping("/task-assign")
-  public String assignTask(Model model, Long id, @RequestParam Long userId, TaskDTO taskDTO) {
+  public String assignTask(Model model, @RequestParam Long userId, TaskDTO taskDTO) {
     User userLogged = getLoggedUser();
     Task task = taskService.getById(taskDTO.getId());
     User assignedTo = userService.getById(userId);
@@ -165,7 +155,7 @@ public class TaskController {
     task.setAssigned(true);
     task.setUser(assignedTo);
     taskService.assignTo(assignedTo, task);
-    return "redirect:/profile?id=" + assignedTo.getId() + "&assigned";
+    return "redirect:/task?taskId=" + task.getId();
   }
 
   @GetMapping("/task-approve")
@@ -237,15 +227,11 @@ public class TaskController {
     if (userLogged != null) {
       model.addAttribute("loggedUser", userLogged);
       model.addAttribute("tasks", taskList);
-    }
-    // Check if it's user's task
-    if (taskService.findByUser(getLoggedUser()).contains(taskService.getOne(id))) {
       model.addAttribute("task", taskService.getOne(id));
-      return "/task-edit";
-    } else {
-      return "redirect:task-list?notfound";
     }
-  }
+      return "/task-edit";
+    }
+
 
   @PutMapping("/task-edit")
   public String editTask(Model model, Task task) {
@@ -257,7 +243,7 @@ public class TaskController {
     }
     taskService.editById(
         task.getId(), task.getDescription(), task.getTargetDate(), task.isCompleted());
-    return "redirect:task-list?updated";
+    return "redirect:/task?taskId=" + task.getId();
   }
 
   @GetMapping("/task-complete")
@@ -342,7 +328,7 @@ public class TaskController {
     Task currentTask = taskService.getById(taskId);
     model.addAttribute("task", currentTask);
     currentTask.setStatus(taskDTO.getStatus());
-    taskService.changeStatus(currentTask.getId());
+    taskService.changeStatus(currentTask);
     return "redirect:/task?taskId=" + currentTask.getId();
   }
 }

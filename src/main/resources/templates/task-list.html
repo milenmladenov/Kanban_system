@@ -14,22 +14,14 @@
 <script src="js/dataTablesConfig/task-list_dt.js"></script>
 
 <div class="container">
-    <div th:if="${pendingTasksCount} > 0">
-        <div class="alert alert-success alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <span class="fas fa-info-circle marginright"></span> You have <span th:text="${pendingTasksCount}"></span>
-            pending task(s). <a href="/tasks-pending">Bring me there</a>
-        </div>
-    </div>
     <h1><span class="glyphicon glyphicon-check"></span> <span th:text="${loggedUser.firstName}"></span>'s Tasks: </h1>
     <h1><span class="fas fa-tasks marginright"></span> To-Do </h1>
     <div class="panel panel-login">
         <table id="TodoList" class="table table-hover table-striped">
             <thead class="thead-inverse">
             <tr>
-                <th class="col-md-7">Description</th>
+                <th class="col-md-7">Info</th>
                 <th>Target Date</th>
-                <th>Complete</th>
                 <th class="col-md-1">Action</th>
             </tr>
             </thead>
@@ -42,7 +34,7 @@
                 <td></td>
             </tr>
             <tr id="todoTableRow" th:each="task : ${tasks}">
-                <td><a href="@{/task(taskId={task.id})}"><span th:text="${task.title}"></span></a><span
+                <td><a th:href="@{/task(taskId=${task.id})}"><span th:text="${task.title}"></span></a><span
                         th:if="${#strings.toString(task.targetDate)} == ${today}" class="label label-danger marginleft">Today</span><span
                         th:if="${task.user} != ${task.creator}"><small class="marginleft"
                                                                        style="color: #666666"> from <a
@@ -50,58 +42,122 @@
                         th:text="${task.creator.firstName}+ ' '+${task.creator.lastName}"></span></a> </small></span>
                 </td>
                 <td th:text="${#dates.format(task.targetDate, 'dd MMMMM yyyy')}"></td>
-                <td th:if="!${task.completed}"><a th:href="@{/task-complete(id=${task.id})}" data-toggle="tooltip"
-                                                  data-placement="right" title="Complete"
-                                                  class="btn btn-success btn-sm">I did it!</a></td>
+
                 <td class="col-md-2">
                     <a th:href="@{/task-edit(id=${task.id})}" data-toggle="tooltip" data-placement="left"
                        title="Edit task" class="btn btn-warning btn-sm"><span
                             class="marginleft glyphicon fa fa-pencil-alt"></span></a>
-                    <a th:href="@{/task-delete(id=${task.id})}" data-toggle="tooltip" data-placement="right"
+                    <button type="button" th:id="myBtn + ${task.id}"  data-placement="right"
                        title="Delete task" class="btn btn-danger btn-sm"><span
-                            class="fa fa-trash marginleft"></span></a>
-                    <a id="deleteTask" th:value="${task.id}" data-toggle="tooltip" data-placement="right"
-                       title="Delete task" class="btn btn-danger btn-sm"><span
-                            class="fa fa-trash marginleft"></span></a>
+                            class="fa fa-trash marginleft"></span></button>
                 </td>
+                <div th:id="myModal  + ${task.id}" style="display: none;
+      position: fixed;
+      z-index: 1; /* Sit on top */
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);">
+                    <div style="background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 741px;">
+                        <span th:class="close + ${task.id}">&times;</span>
+                            <form th:action="@{/task-list(id=${task.id})}" th:object="${task}" th:method="delete">
+                                <div class="panel panel-login" style="height: 432px;">
+                                    <div class="form-group">
+                                        <h3>Do you want to delete [[${task.title}]] ?</h3>
+                                    </div>
+                                    <input type="hidden" name="taskId" th:value="${task.id}">
+                                    <br>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit"
+                                                       name="task-submit"
+                                                       id="task-submit"
+                                                       class="form-control btn btn-info"
+                                                       style="margin-left:90%;"
+                                                       value="YES"/>
+                                            </div>
+                                            <span th:class="close + ${task.id}"><button class="form-control btn btn-info">NO</button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <script th:inline="javascript">
+/*<![CDATA[*/
+var modal[[${task.id}]]= document.getElementById("myModal[[${task.id}]]");
+var btn[[${task.id}]] = document.getElementById("myBtn[[${task.id}]]");
+var span[[${task.id}]] = document.getElementsByClassName("close[[${task.id}]]")[0];
+
+btn[[${task.id}]].onclick = function() {
+  modal[[${task.id}]].style.display = "block";
+}
+span[[${task.id}]].onclick = function() {
+  modal[[${task.id}]].style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal[[${task.id}]]){
+    modal[[${task.id}]].style.display = "none";
+  }
+}
+/*]]>*/
+
+
+
+                            </script>
+                        </div>
+                    </div>
             </tr>
             </tbody>
         </table>
     </div>
+
 
     <h1><span class="fas fa-check-circle"></span> Completed Tasks: </h1>
     <div class="panel panel-login">
         <table id="completedTaskList" class="table table-hover table-striped">
             <thead class="thead-inverse">
             <tr>
-                <th>Description</th>
+                <th>Info</th>
                 <th>Date</th>
-                <th>Completed</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="task : ${completedTasks}">
-                <td><span th:text="${task.description}"></span><span th:if="${task.user} != ${task.creator}"><small
+                <td><a th:href="@{/task(taskId=${task.id})}"><span th:text="${task.title}"></span></a><span th:if="${task.user} != ${task.creator}"><small
                         class="marginleft" style="color: #666666"> from <a th:href="@{/profile(id=${task.creator.id})}"><span
                         th:text="${task.creator.firstName} + ' '+ ${task.creator.lastName}"></span></a> </small></span>
                 </td>
                 <td th:text="${#dates.format(task.targetDate, 'dd MMMMM yyyy')}"></td>
-                <td th:if="${task.completed}"><a th:href="@{/task-uncomplete(id=${task.id})}" data-toggle="tooltip"
-                                                 data-placement="right" title="Move back to tasks"
-                                                 class="btn btn-danger btn-sm">Incomplete</a></td>
-                <td>
-                    <a th:href="@{/task-edit(id=${task.id})}" data-toggle="tooltip" data-placement="left"
-                       title="Edit task" class="btn btn-warning btn-sm"><span
-                            class="marginleft fa fa-pencil-alt"></span></a>
-                    <a th:href="@{/task-delete(id=${task.id})}" id="deleteCompletedTask" th:value="${task.id}"
-                       data-toggle="tooltip" data-placement="right" title="Delete task"
-                       class="btn btn-danger btn-sm"><span class="fa fa-trash marginleft"></span></a>
-                </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close-modal")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+</script>
 </body>
 </html>

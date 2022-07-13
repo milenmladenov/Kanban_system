@@ -1,6 +1,7 @@
 package com.tusofia.diplomna.service.user;
 
 import com.tusofia.diplomna.dto.UserDTO;
+import com.tusofia.diplomna.exception.UserNotFoundException;
 import com.tusofia.diplomna.model.Plan;
 import com.tusofia.diplomna.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,11 +45,13 @@ public interface UserService extends UserDetailsService {
 
   User addMember(Plan plan, User user);
 
+  User removeMember(Plan plan, User user);
+
   void incrementTasksCompleted(User user);
 
   void decrementTasksCompleted(User user);
 
-  List<User> findAllByPlans(Plan plan);
+  List<User> findAllByPlans(Plan plan,String fullName);
 
   User setShowEmail(User user, boolean value);
 
@@ -56,5 +59,11 @@ public interface UserService extends UserDetailsService {
 
   User getById(Long id);
 
+  List<User> searchByFirstNameAndLastNameLike(String name);
 
+  void updateResetPasswordToken(String token, String email) throws UserNotFoundException;
+
+  User getByResetPasswordToken(String token);
+
+  void updatePassword(User user, String newPassword);
 }
