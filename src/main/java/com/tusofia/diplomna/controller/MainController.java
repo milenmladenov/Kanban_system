@@ -40,14 +40,14 @@ public class MainController {
   @GetMapping("/")
   public String planList(Model model,@Param("title") String title) {
     User userLogged = getLoggedUser();
-    List<Plan> creatorList = planService.findByCreator(userLogged,title);
+    List<Plan> plans = planService.findByCreator(userLogged,title);
     List<Plan> memberList = planService.findByMember(userLogged,title);
+    plans.addAll(memberList);
     if (userLogged == null) {
       return "redirect:/login";
     }
     model.addAttribute("plan", new Plan());
-    model.addAttribute("createdPlans", creatorList);
-    model.addAttribute("memberPlans", memberList);
+    model.addAttribute("createdPlans", plans);
     model.addAttribute("loggedUser", userLogged);
     model.addAttribute("view", "index");
     return "index";

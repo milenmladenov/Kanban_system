@@ -52,7 +52,7 @@
         </div>
     </div>
     <br>
-    <h3 class="greentext">Plans created by you:</h3>
+    <h3 class="greentext">Plans:</h3>
     </br>
     <div class="row">
         <div th:each="plan : ${createdPlans}" class="panel panel-login list-inline-item">
@@ -69,24 +69,7 @@
             </a>
         </div>
     </div>
-<br>
-        <h3 class="greentext">Plans you are member of:</h3>
-        </br>
-        <div class="row">
-        <div th:each="plan : ${memberPlans}" class="panel panel-login list-inline-item">
-            <a th:href="@{/plan(id=${plan.id})}" style="text-decoration: none; cursor: pointer;">
-                <ul class="list-inline">
-                    <li style="list-style:none; " class="list-inline-item">
-                        <div>
-                            <h1>
-                                [[${plan.title}]]</h1>
-                            </h1>Created By <b>[[${plan.creator.firstName}]] [[${plan.creator.lastName}]]</b>
-                        </div>
-                    </li>
-                </ul>
-            </a>
-        </div>
-            </div>
+
 </div>
 
 <script>

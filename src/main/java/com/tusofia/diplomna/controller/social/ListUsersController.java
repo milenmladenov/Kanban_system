@@ -30,7 +30,6 @@ public class ListUsersController {
     if (userLogged != null) {
       model.addAttribute("loggedUser", userLogged);
       model.addAttribute("users", users);
-      userService.updateUserAttributes(userLogged, req);
     }
     return "users";
   }

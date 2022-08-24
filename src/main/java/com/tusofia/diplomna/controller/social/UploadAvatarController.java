@@ -42,7 +42,9 @@ public class UploadAvatarController {
   }
 
   @PostMapping("/upload-avatar")
+  // A method that handles the upload of the avatar.
   public String handleFileUpload(
+      // A Spring class that represents a file uploaded through a multipart request.
       @RequestParam("file") MultipartFile file, Authentication authentication) {
     User user = userService.findByUser(authentication.getName());
     if (storageService.isCorrectImageType(file)) {
